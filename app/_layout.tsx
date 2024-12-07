@@ -7,6 +7,8 @@ import { useEffect } from "react";
 export default function RootLayout() {
   const [loaded] = useFonts({
     Jaini: require("../assets/fonts/Jaini/Jaini-Regular.ttf"),
+    Jaldi: require("../assets/fonts/Jaldi/Jaldi-Regular.ttf"),
+    "Jaldi-bold": require("../assets/fonts/Jaldi/Jaldi-Bold.ttf"),
   });
 
   useEffect(() => {
