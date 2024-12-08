@@ -1,16 +1,21 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../assets/colors/colors";
+import Intro from "../components/Intro";
+import { useRouter } from "expo-router";
 
 const index = () => {
+  const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={require("../assets/images/light-logo.png")}
-        style={styles.img}
-      />
-      <Text style={styles.text}>mk-passes</Text>
+      <Intro />
+      <TouchableOpacity
+        style={styles.startBtn}
+        onPress={() => router.push("/home")}
+      >
+        <Text style={styles.startText}>Start</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -20,7 +25,7 @@ export default index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0A97B0",
+    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -28,12 +33,26 @@ const styles = StyleSheet.create({
     fontSize: 80,
     fontFamily: "Jaini",
     textTransform: "uppercase",
-    color: colors.light,
+    color: colors.dark,
+    lineHeight: 70,
   },
   img: {
     width: 200,
-    aspectRatio: 1,
+    height: 200,
     resizeMode: "contain",
     alignSelf: "center",
+    marginBottom: 10,
+  },
+  startBtn: {
+    paddingVertical: 15,
+    width: 150,
+    borderRadius: 30,
+    alignItems: "center",
+    backgroundColor: colors["darkest-pri"],
+  },
+  startText: {
+    color: "#fff",
+    fontSize: 30,
+    fontFamily: "Jaini",
   },
 });
