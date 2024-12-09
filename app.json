@@ -36,6 +36,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "packagerOpts": {
+      "sourceExts": ["js", "jsx", "ts", "tsx", "svg"]
     }
   }
 }
