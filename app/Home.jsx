@@ -4,6 +4,7 @@ import colors from "../assets/colors/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
+import QuickLinksCard from "../components/QuickLinksCard";
 
 const home = () => {
   return (
@@ -12,6 +13,7 @@ const home = () => {
       <View style={styles.hero}>
         <Text style={styles.text}>With </Text>
         <Text style={styles.logo}>Mk-passes</Text>
+        <QuickLinksCard img={require("../assets/images/passwords-ill.png")} />
       </View>
       <View>
         <BottomNav current={"home"} />
