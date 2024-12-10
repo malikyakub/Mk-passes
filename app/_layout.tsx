@@ -23,11 +23,11 @@ export default function RootLayout() {
 
   return (
     <>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="home" />
       </Stack>
-      <StatusBar style="light" backgroundColor="#0A97B0" />
+      <StatusBar style="dark" backgroundColor="#B1F0F7" />
     </>
   );
 }
