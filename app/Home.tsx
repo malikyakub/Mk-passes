@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
 import HeroCards from "../components/HeroCards";
 
-const home = () => {
+const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
@@ -29,7 +29,7 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
