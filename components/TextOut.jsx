@@ -29,6 +29,7 @@ const TextOut = ({ msg, placeholder }) => {
         placeholder={`${placeholder} message appears here...`}
         value={text}
         onChangeText={(newText) => setText(newText)}
+        readOnly
       />
       <View style={styles.btns}>
         <TouchableOpacity style={styles.btn} onPress={() => setText("")}>
