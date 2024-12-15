@@ -9,6 +9,7 @@ export default function RootLayout() {
     Jaini: require("../assets/fonts/Jaini/Jaini-Regular.ttf"),
     Jaldi: require("../assets/fonts/Jaldi/Jaldi-Regular.ttf"),
     "Jaldi-bold": require("../assets/fonts/Jaldi/Jaldi-Bold.ttf"),
+    Fira: require("../assets/fonts/Fira_Mono/FiraMono-Regular.ttf"),
   });
 
   useEffect(() => {
@@ -23,9 +24,10 @@ export default function RootLayout() {
 
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack screenOptions={{ headerShown: false, animation: "none" }}>
         <Stack.Screen name="index" />
-        <Stack.Screen name="home" />
+        <Stack.Screen name="Home" />
+        <Stack.Screen name="Encryption" />
       </Stack>
       <StatusBar style="dark" backgroundColor="#B1F0F7" />
     </>

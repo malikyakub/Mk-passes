@@ -1,6 +1,7 @@
 import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import React from "react";
 import colors from "../assets/colors/colors";
+import { useRouter } from "expo-router";
 
 const images = {
   passwords: require("../assets/Icons/key.png"),
@@ -19,20 +20,84 @@ const inImages = {
 };
 
 const BottomNav = ({ current }) => {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
-      {Object.keys(images).map((key) => (
-        <TouchableOpacity key={key} style={styles.btn}>
-          <Image
-            source={current === key ? inImages[key] : images[key]}
-            alt={key}
-            style={styles.icons}
-          />
-          <Text style={[styles.text, current === key && styles.activeText]}>
-            {key.charAt(0).toUpperCase() + key.slice(1)}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      <TouchableOpacity style={styles.btn} onPress={() => router.push("#")}>
+        <Image
+          source={
+            current === "passwords" ? inImages.passwords : images.passwords
+          }
+          alt="passwords"
+          style={styles.icons}
+        />
+        <Text
+          style={[styles.text, current === "passwords" && styles.activeText]}
+        >
+          Passwords
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => router.push("Encryption")}
+      >
+        <Image
+          source={
+            current === "encryption" ? inImages.encryption : images.encryption
+          }
+          alt="encryption"
+          style={styles.icons}
+        />
+        <Text
+          style={[styles.text, current === "encryption" && styles.activeText]}
+        >
+          Encryption
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.btn} onPress={() => router.push("Home")}>
+        <Image
+          source={current === "home" ? inImages.home : images.home}
+          alt="home"
+          style={styles.icons}
+        />
+        <Text style={[styles.text, current === "home" && styles.activeText]}>
+          Home
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => router.push("Decryption")}
+      >
+        <Image
+          source={
+            current === "decryption" ? inImages.decryption : images.decryption
+          }
+          alt="decryption"
+          style={styles.icons}
+        />
+        <Text
+          style={[styles.text, current === "decryption" && styles.activeText]}
+        >
+          Decryption
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.btn} onPress={() => router.push("#")}>
+        <Image
+          source={current === "settings" ? inImages.settings : images.settings}
+          alt="settings"
+          style={styles.icons}
+        />
+        <Text
+          style={[styles.text, current === "settings" && styles.activeText]}
+        >
+          Settings
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
