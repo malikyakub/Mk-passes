@@ -24,7 +24,10 @@ const BottomNav = ({ current }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.btn} onPress={() => router.push("#")}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => router.push("Passwords")}
+      >
         <Image
           source={
             current === "passwords" ? inImages.passwords : images.passwords
