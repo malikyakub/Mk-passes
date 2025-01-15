@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontFamily: "jaldi",
     fontWeight: "bold",
+    opacity: 0.5,
   },
   next_btn: {
     position: "absolute",
