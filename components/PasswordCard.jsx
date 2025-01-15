@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import PropTypes from "prop-types";
 import colors from "@/assets/colors/colors";
+import { router } from "expo-router";
 
 // Map your icons to local image paths
 const imageMap = {
@@ -17,6 +17,10 @@ const PasswordCard = ({
   password,
   icon,
 }) => {
+  const pressHandler = (id) => {
+    console.log("ID: ", id);
+    router.push(`../password/${id}`);
+  };
   return (
     <View style={styles.card}>
       <View style={styles.side}></View>
@@ -32,7 +36,7 @@ const PasswordCard = ({
         <Text style={styles.accountName}>{accountName}</Text>
         <Text style={styles.text}>{username}</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => pressHandler(passId)}>
         <Image
           source={require("@/assets/Icons/next.png")}
           style={styles.next}
@@ -40,16 +44,6 @@ const PasswordCard = ({
       </TouchableOpacity>
     </View>
   );
-};
-
-// Define prop types
-PasswordCard.propTypes = {
-  passId: PropTypes.number.isRequired,
-  accountName: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
 };
 
 export default PasswordCard;
@@ -76,7 +70,7 @@ const styles = StyleSheet.create({
   },
   side: {
     backgroundColor: colors["darkest-pri"],
-    width: 15,
+    width: 10,
     height: "100%",
     position: "absolute",
     left: 0,
