@@ -84,7 +84,7 @@ export default password;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.cyan[100],
     justifyContent: "center",
   },
   hero: {
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   password_info: {
     padding: 20,
-    backgroundColor: "#0A97B04D",
+    backgroundColor: colors.opacity.cyan[20],
     marginTop: 20,
     display: "flex",
     flexDirection: "row",
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   password_manager: {
-    backgroundColor: "#0A97B04D",
+    backgroundColor: colors.opacity.cyan[20],
     marginTop: 20,
     display: "flex",
     paddingLeft: 60,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     height: 80,
   },
   side: {
-    backgroundColor: colors["darkest-pri"],
+    backgroundColor: colors.cyan[300],
     width: 10,
     height: "100%",
     position: "absolute",

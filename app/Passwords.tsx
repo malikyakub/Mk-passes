@@ -49,7 +49,7 @@ export default Passwords;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.cyan[100],
     justifyContent: "center",
   },
   hero: {

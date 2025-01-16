@@ -51,7 +51,7 @@ export default PasswordCard;
 const styles = StyleSheet.create({
   card: {
     marginBottom: 20,
-    backgroundColor: "#0A97B033",
+    backgroundColor: colors.opacity.cyan[20],
     shadowColor: "rgba(0,0,0,0.1)",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   side: {
-    backgroundColor: colors["darkest-pri"],
+    backgroundColor: colors.cyan[300],
     width: 10,
     height: "100%",
     position: "absolute",

@@ -33,14 +33,14 @@ const TextOut = ({ msg, placeholder }) => {
       />
       <View style={styles.btns}>
         <TouchableOpacity style={styles.btn} onPress={() => setText("")}>
-          <MaterialIcons name="clear" size={24} color={colors["darkest-pri"]} />
+          <MaterialIcons name="clear" size={24} color={colors.cyan[300]} />
           <Text style={styles.btnText}>clear</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn}
           onPress={() => Clipboard.setString(text)}
         >
-          <FontAwesome5 name="copy" size={24} color={colors["darkest-pri"]} />
+          <FontAwesome5 name="copy" size={24} color={colors.cyan[300]} />
           <Text style={styles.btnText}>copy</Text>
         </TouchableOpacity>
       </View>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     marginBlock: 10,
   },
   btn: {
-    backgroundColor: colors["darker-pri"],
+    backgroundColor: colors.cyan[200],
     flexDirection: "row",
     gap: 5,
     alignItems: "center",

@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   card: {
-    backgroundColor: colors["darker-pri"],
+    backgroundColor: colors.cyan[200],
     padding: 20,
     marginVertical: 10,
     borderRadius: 10,
@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
     fontSize: 35,
     marginBottom: 20,
     fontFamily: "Jaini",
-    color: colors["darkest-pri"],
+    color: colors.cyan[300],
     textTransform: "capitalize",
   },
   button: {
-    backgroundColor: colors["darkest-pri"],
+    backgroundColor: colors.cyan[300],
     paddingVertical: 10,
     borderRadius: 5,
     width: 150,

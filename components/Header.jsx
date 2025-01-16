@@ -13,7 +13,7 @@ const Header = () => {
         alt="logo"
       />
       <HeaderBtns />
-      <StatusBar style="dark" backgroundColor={colors["darkest-pri"]} />
+      <StatusBar style="dark" backgroundColor={colors.cyan[300]} />
     </View>
   );
 };
@@ -22,7 +22,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors["darkest-pri"],
+    backgroundColor: colors.cyan[300],
     paddingVertical: 15,
     paddingHorizontal: 20,
     flexDirection: "row",

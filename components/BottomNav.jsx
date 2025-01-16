@@ -110,7 +110,7 @@ export default BottomNav;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    backgroundColor: colors["darker-pri"],
+    backgroundColor: colors.cyan[200],
     paddingHorizontal: 20,
     paddingVertical: 10,
     flexDirection: "row",
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   activeText: {
-    color: colors["darkest-pri"],
+    color: colors.cyan[300],
     fontSize: 14,
     fontFamily: "Jaldi",
   },

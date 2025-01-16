@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   bg: {
     width: "100%",
     height: 180,
-    backgroundColor: colors["darkest-pri"],
+    backgroundColor: colors.cyan[300],
     position: "absolute",
     bottom: 0,
     zIndex: -1,
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   btn: {
-    backgroundColor: colors["darker-pri"],
+    backgroundColor: colors.cyan[200]
     padding: 10,
     width: 120,
     borderRadius: 10,

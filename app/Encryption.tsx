@@ -30,11 +30,7 @@ const Encryption = () => {
             onChangeText={(newText) => setText(newText)}
           />
           <TouchableOpacity style={styles.btn} onPress={() => setText("")}>
-            <MaterialIcons
-              name="clear"
-              size={24}
-              color={colors["darkest-pri"]}
-            />
+            <MaterialIcons name="clear" size={24} color={colors.cyan[300]} />
             <Text style={styles.btnText}>clear</Text>
           </TouchableOpacity>
         </View>
@@ -51,7 +47,7 @@ export default Encryption;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.cyan[100],
     justifyContent: "center",
   },
   hero: {
@@ -79,7 +75,7 @@ const styles = StyleSheet.create({
     fontFamily: "Jaldi",
   },
   btn: {
-    backgroundColor: colors["darker-pri"],
+    backgroundColor: colors.cyan[200],
     flexDirection: "row",
     gap: 5,
     alignItems: "center",

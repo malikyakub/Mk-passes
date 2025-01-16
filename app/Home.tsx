@@ -19,7 +19,7 @@ const Home = () => {
           onPress={() => Linking.openURL("https://mk-yakub.netlify.app")}
           style={styles.heart}
           name="heart"
-          color={colors["darkest-pri"]}
+          color={colors.cyan[300]}
         />
       </View>
       <View>
@@ -34,7 +34,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.cyan[100],
     justifyContent: "center",
   },
   hero: {

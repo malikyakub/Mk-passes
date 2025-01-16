@@ -25,7 +25,7 @@ export default index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.cyan[100],
     justifyContent: "center",
     alignItems: "center",
   },
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: 150,
     borderRadius: 30,
     alignItems: "center",
-    backgroundColor: colors["darkest-pri"],
+    backgroundColor: colors.cyan[300],
   },
   startText: {
     color: "#fff",
