@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import UserHeader from "@/components/UserHeader";
+import { useRouter } from "expo-router";
 
 const Userpage = () => {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(false);
@@ -18,6 +19,7 @@ const Userpage = () => {
   const [biometricsEnabled, setBiometricsEnabled] = useState(false);
   const [appThemeLight, setAppThemeLight] = useState(false);
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
+  const router = useRouter();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,7 +27,10 @@ const Userpage = () => {
       <View style={styles.hero}>
         <View style={styles.section}>
           <Text style={styles.section_header}>Account Information</Text>
-          <TouchableOpacity style={styles.sub_section}>
+          <TouchableOpacity
+            style={styles.sub_section}
+            onPress={() => router.push("/Profile")}
+          >
             <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}
@@ -49,7 +54,10 @@ const Userpage = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sub_section}>
+          <TouchableOpacity
+            onPress={() => router.push("/PasswordChange")}
+            style={styles.sub_section}
+          >
             <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}

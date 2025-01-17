@@ -16,19 +16,25 @@ const password = () => {
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Image
-            style={styles.back}
-            source={require("@/assets/Icons/back.png")}
-          />
-        </TouchableOpacity>
-        <View style={styles.password_info}>
-          <Image
-            style={styles.pass_image}
-            source={require("@/assets/api/images/youtube.png")}
-          />
-          <Text style={styles.accountName}>youtube</Text>
-          <Text style={styles.dateAdded}>15-jan-2025</Text>
+        <View style={styles.password_header}>
+          <View style={styles.side}></View>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => router.back()}
+          >
+            <Image
+              style={styles.back}
+              source={require("@/assets/Icons/back.png")}
+            />
+          </TouchableOpacity>
+          <View style={styles.password_info}>
+            <Image
+              style={styles.pass_image}
+              source={require("@/assets/api/images/youtube.png")}
+            />
+            <Text style={styles.accountName}>youtube</Text>
+            <Text style={styles.dateAdded}>15-jan-2025</Text>
+          </View>
         </View>
 
         <View style={styles.password_manager}>
@@ -92,16 +98,20 @@ const styles = StyleSheet.create({
     padding: 20,
     zIndex: 1,
   },
+  backBtn: {},
   back: {
     width: 30,
     height: 30,
     resizeMode: "contain",
   },
-  password_info: {
-    padding: 20,
+  password_header: {
     backgroundColor: colors.opacity.cyan[20],
-    marginTop: 20,
+    padding: 20,
+    overflow: "hidden",
+  },
+  password_info: {
     display: "flex",
+    marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -135,11 +145,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     height: 80,
+    overflow: "hidden",
   },
   side: {
     backgroundColor: colors.cyan[300],
     width: 10,
-    height: "100%",
+    height: "150%",
     position: "absolute",
     left: 0,
   },
