@@ -9,6 +9,7 @@ import {
   Linking,
 } from "react-native";
 import colors from "../assets/colors/colors";
+import { router } from "expo-router";
 
 const HeroCards = () => {
   return (
@@ -25,7 +26,10 @@ const HeroCards = () => {
             Securely store and manage all your passwords in one place, ensuring
             easy access and top-notch protection.
           </Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            onPress={() => router.push("/AddPassowrd")}
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>new password</Text>
           </TouchableOpacity>
         </View>
@@ -37,7 +41,10 @@ const HeroCards = () => {
             Message encryption secures data by converting it into code, readable
             only with a key. It protects privacy and blocks unauthorized access.
           </Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            onPress={() => router.push("/Encryption")}
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>Encrypt</Text>
           </TouchableOpacity>
         </View>
@@ -59,7 +66,10 @@ const HeroCards = () => {
             SecDecryption restores encrypted data to its original form using a
             key, allowing authorized access while ensuring security and privacy.
           </Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            onPress={() => router.push("/Decryption")}
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>Decrypt</Text>
           </TouchableOpacity>
         </View>
