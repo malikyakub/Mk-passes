@@ -30,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="Encryption" />
         <Stack.Screen name="Decryption" />
         <Stack.Screen name="Passwords" />
+        <Stack.Screen name="Setting" />
       </Stack>
       <StatusBar style="dark" backgroundColor="#B1F0F7" />
     </>
