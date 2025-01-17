@@ -1,10 +1,12 @@
 import { StyleSheet, TouchableOpacity, Image, View } from "react-native";
 import React from "react";
+import { useRouter } from "expo-router";
 
 const HeaderBtns = () => {
+  const router = useRouter();
   return (
     <View style={styles.btns}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push("/AddPassowrd")}>
         <Image
           source={require("../assets/Icons/add.png")}
           style={styles.icon}

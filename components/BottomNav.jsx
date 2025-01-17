@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
   },
   activeText: {
     color: colors.cyan[300],
-    fontSize: 14,
     fontFamily: "Jaldi",
   },
 });
