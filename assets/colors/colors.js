@@ -1,11 +1,3 @@
-// export default {
-//   primary: "#B1F0F7",
-//   "darker-pri": "#81BFDA",
-//   "darkest-pri": "#0A97B0",
-//   dark: "#2A3335",
-//   light: "#fff",
-// };
-
 export default {
   cyan: {
     100: "#B1F0F7",
@@ -22,6 +14,9 @@ export default {
     dark: {
       50: "#2A333580",
       20: "#2A333533",
+    },
+    light: {
+      50: "#ffffff80",
     },
   },
 };
