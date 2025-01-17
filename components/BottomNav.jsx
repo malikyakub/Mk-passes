@@ -89,7 +89,10 @@ const BottomNav = ({ current }) => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btn} onPress={() => router.push("#")}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => router.push("/Setting")}
+      >
         <Image
           source={current === "settings" ? inImages.settings : images.settings}
           alt="settings"

@@ -16,7 +16,12 @@ export default {
   light: "#ffffff",
   opacity: {
     cyan: {
+      50: "#0A97B080",
       20: "#0A97B033",
+    },
+    dark: {
+      50: "#2A333580",
+      20: "#2A333533",
     },
   },
 };
