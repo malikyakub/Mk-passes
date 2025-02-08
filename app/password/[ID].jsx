@@ -1,43 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { useRouter } from "expo-router";
-import { useLocalSearchParams } from "expo-router";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 import passwordJson from "@/assets/api/passwords.json";
 import colors from "@/assets/colors/colors";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { routeToScreen } from "expo-router/build/useScreens";
 
-const password = () => {
-  const router = useRouter();
+const imageMap = {
+  "youtube.png": require("@/assets/api/images/youtube.png"),
+  "facebook.png": require("@/assets/api/images/facebook.png"),
+};
+
+const PasswordDetails = () => {
   const { ID } = useLocalSearchParams();
+  const [passwordData, setPasswordData] = useState(null);
+
+  useEffect(() => {
+    if (ID) {
+      const foundPassword = passwordJson.find((item) => item.ID === parseInt(ID));
+      setPasswordData(foundPassword);
+    }
+  }, [ID]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        <View style={styles.password_header}>
-          <View style={styles.side}></View>
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => router.back()}
-          >
-            <Image
-              style={styles.back}
-              source={require("@/assets/Icons/back.png")}
-            />
-          </TouchableOpacity>
-          <View style={styles.password_info}>
-            <Image
-              style={styles.pass_image}
-              source={require("@/assets/api/images/youtube.png")}
-            />
-            <Text style={styles.accountName}>youtube</Text>
-            <Text style={styles.dateAdded}>15-jan-2025</Text>
-          </View>
-        </View>
-
-        <View style={styles.password_manager}>
+        {passwordData ? (
+          <>
+            <View style={styles.password_header}>
+              <TouchableOpacity style={styles.back_btn} onPress={() => router.back()}>
+                <Image style={styles.back_img} source={require("../../assets/Icons/back.png")} />
+              </TouchableOpacity>
+              {imageMap[passwordData.icon] ? (
+                <Image source={imageMap[passwordData.icon]} style={styles.pass_image} />
+              ) : (
+                <Image
+                  source={require("@/assets/Icons/no-profile.png")}
+                  style={styles.pass_image}
+                />
+              )}
+              <Text style={styles.accountName}>{passwordData["account-name"]}</Text>
+            </View>
+            <View style={styles.card}>
           <View style={styles.side}></View>
           <Image
             style={styles.icon}
@@ -51,7 +58,7 @@ const password = () => {
             />
           </TouchableOpacity>
         </View>
-        <View style={styles.password_manager}>
+        <View style={styles.card}>
           <View style={styles.side}></View>
           <Image
             style={styles.icon}
@@ -79,13 +86,17 @@ const password = () => {
             />
           </TouchableOpacity>
         </View>
+          </>
+        ) : (
+          <Text style={styles.txt}>No password found for this ID.</Text>
+        )}
       </View>
       <BottomNav current={"passwords"} />
     </SafeAreaView>
   );
 };
 
-export default password;
+export default PasswordDetails;
 
 const styles = StyleSheet.create({
   container: {
@@ -98,46 +109,54 @@ const styles = StyleSheet.create({
     padding: 20,
     zIndex: 1,
   },
-  backBtn: {},
-  back: {
-    width: 30,
-    height: 30,
-    resizeMode: "contain",
+  back_img : {
+    width : 30,
+    height : 30,
+    resizeMode :'contain',
+  },
+  back_btn : {
+    position : 'absolute',
+    left : 20,
+    top : 20
   },
   password_header: {
     backgroundColor: colors.opacity.cyan[20],
     padding: 20,
-    overflow: "hidden",
-  },
-  password_info: {
-    display: "flex",
-    marginTop: 20,
-    flexDirection: "row",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     alignItems: "center",
   },
   pass_image: {
     width: 80,
     height: 80,
     resizeMode: "contain",
+    marginBottom: 10,
   },
   accountName: {
     fontSize: 30,
     fontWeight: "bold",
     fontFamily: "Jaini",
     color: colors.dark,
-    marginLeft: 15,
   },
-  dateAdded: {
-    position: "absolute",
-    right: 20,
-    top: "50%",
-    transform: [{ translateY: 10 }],
-    fontSize: 14,
+  password_info: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 15,
+    paddingHorizontal: 10,
+  },
+  label: {
+    fontSize: 18,
+    fontFamily: "jaldi",
+    fontWeight: "bold",
+    color: colors.dark,
+    marginRight: 10,
+  },
+  txt: {
+    fontSize: 18,
     fontFamily: "jaldi",
     color: colors.dark,
-    textAlign: "right",
   },
-  password_manager: {
+  card: {
     backgroundColor: colors.opacity.cyan[20],
     marginTop: 20,
     display: "flex",
@@ -150,7 +169,7 @@ const styles = StyleSheet.create({
   side: {
     backgroundColor: colors.cyan[300],
     width: 10,
-    height: "150%",
+    height: "100%",
     position: "absolute",
     left: 0,
   },
