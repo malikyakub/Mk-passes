@@ -43,7 +43,7 @@ const Login = () => {
           />
         </View>
         <View style={styles.field}>
-          <TouchableOpacity onPress={() => router.push("/")}>
+          <TouchableOpacity onPress={() => router.push("/ForgetPassword")}>
             <Text style={styles.forgotPasswordText}>Forgot password</Text>
           </TouchableOpacity>
         </View>
