@@ -26,7 +26,7 @@ export default Intro;
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
+    width: "100%",
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   logo: {
     display: "flex",
     alignItems: "center",
-    width: 248,
+    width: "100%",
     marginBottom: 200,
   },
   motto: {
