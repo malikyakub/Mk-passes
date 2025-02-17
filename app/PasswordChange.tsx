@@ -23,7 +23,7 @@ const PasswordChange = () => {
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={80} // Adjust offset if there's a header
+        keyboardVerticalOffset={80}
       >
         <ScrollView contentContainerStyle={styles.hero}>
           <View style={styles.field}>
@@ -92,4 +92,5 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 5,
   },
+  
 });
