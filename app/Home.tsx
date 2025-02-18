@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Linking, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import colors from "../assets/colors/colors";
@@ -7,6 +15,7 @@ import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
 import HeroCards from "../components/HeroCards";
 import { router } from "expo-router";
+import HomeCard from "@/components/HomeCard";
 
 const Home = () => {
   const card = [
@@ -43,19 +52,93 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        <Text style={styles.text}>With </Text>
-        <Text style={styles.logo}>Mk-passes</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {card.map((item, index) => (
-            <HeroCards
-              key={index}
-              body={item.body}
-              imageUrl={item.cardimg}
-              buttonText={item.buttonText}
-              title={item.title}
-              page={item.link}
+        <HomeCard title={"Mk-passes"} body={"With"} />
+
+        <ScrollView style={styles.cards} showsVerticalScrollIndicator={false}>
+          <View style={styles.card}>
+            <Image
+              style={styles.card_img}
+              source={require("@/assets/images/passwords-ill.png")}
             />
-          ))}
+            <View style={styles.txt}>
+              <Text style={styles.title}>Strong password</Text>
+              <Text style={styles.body}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Explicabo quia architecto nobis expedita veniam, sapiente,
+                tempora incidunt nihil consectetur cumque laboriosam. Magni
+                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+              </Text>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => router.push("/AddPassowrd")}
+              >
+                <Text style={styles.btnTxt}>Add passwords</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.card}>
+            <Image
+              style={styles.card_img}
+              source={require("@/assets/images/enc-dec-ill.png")}
+            />
+            <View style={styles.txt}>
+              <Text style={styles.title}>Encrypt messages</Text>
+              <Text style={styles.body}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Explicabo quia architecto nobis expedita veniam, sapiente,
+                tempora incidunt nihil consectetur cumque laboriosam. Magni
+                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+              </Text>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => router.push("/Encryption")}
+              >
+                <Text style={styles.btnTxt}>Encrypt</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.card}>
+            <Image
+              style={styles.card_img}
+              source={require("@/assets/images/enc-dec-ill.png")}
+            />
+            <View style={styles.txt}>
+              <Text style={styles.title}>Decrypt messages</Text>
+              <Text style={styles.body}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Explicabo quia architecto nobis expedita veniam, sapiente,
+                tempora incidunt nihil consectetur cumque laboriosam. Magni
+                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+              </Text>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => router.push("/Decryption")}
+              >
+                <Text style={styles.btnTxt}>Decrypt</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.card_me}>
+            <Image
+              style={styles.card_img}
+              source={require("@/assets/images/me-ill.png")}
+            />
+            <View style={styles.txt}>
+              <Text style={styles.title}>About me</Text>
+              <Text style={[styles.body, { color: colors.light }]}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Explicabo quia architecto nobis expedita veniam, sapiente,
+                tempora incidunt nihil consectetur cumque laboriosam. Magni
+                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+              </Text>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => Linking.openURL("https://mk-yakub.netlify.app")}
+              >
+                <Text style={styles.btnTxt}>My portfolio</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </ScrollView>
         <AntDesign
           onPress={() => Linking.openURL("https://mk-yakub.netlify.app")}
@@ -81,24 +164,73 @@ const styles = StyleSheet.create({
   },
   hero: {
     flex: 1,
-    paddingHorizontal: 20,
+    padding: 20,
     justifyContent: "center",
     zIndex: 1,
   },
-  text: {
+  cards: {
+    display: "flex",
+    gap: 10,
+    marginBlock: 10,
+  },
+  card: {
+    width: "100%",
+    borderRadius: 10,
+    height: 250,
+    alignItems: "center",
+    justifyContent: "space-around",
+    gap: 10,
+    flexDirection: "row",
+    backgroundColor: colors.cyan[200],
+    marginBlock: 5,
+  },
+  card_me: {
+    width: "100%",
+    borderRadius: 10,
+    height: 250,
+    alignItems: "center",
+    justifyContent: "space-around",
+    gap: 10,
+    flexDirection: "row",
+    backgroundColor: colors.dark,
+    marginBlock: 5,
+  },
+  card_img: {
+    width: 120,
+    height: 120,
+    resizeMode: "contain",
+  },
+  txt: {
+    height: 220,
+    width: 250,
+  },
+  title: {
     fontSize: 30,
+    fontFamily: "Jaini",
+    color: colors.cyan[300],
+    marginBottom: 10,
+  },
+  body: {
+    fontSize: 20,
     fontFamily: "Jaldi",
     color: colors.dark,
+    lineHeight: 20,
+    marginBottom: 20,
+    flex: 1,
+    height: 120,
+    overflow: "hidden",
   },
-  logo: {
-    fontSize: 60,
-    fontFamily: "Jaini",
-    color: colors.dark,
-    lineHeight: 60,
+  btn: {
+    backgroundColor: colors.cyan[300],
+    width: "80%",
+    padding: 5,
+    alignItems: "center",
+    borderRadius: 5,
   },
-  heroCards: {
-    marginBlock: 20,
-    backgroundColor: "red",
+  btnTxt: {
+    fontSize: 18,
+    fontFamily: "Jaldi-bold",
+    color: colors.light,
   },
   heart: {
     fontSize: 20,

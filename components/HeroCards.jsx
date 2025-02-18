@@ -42,24 +42,8 @@ export default HeroCards;
 const styles = StyleSheet.create({
   Card: {
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.cyan[200],
-    padding: 10,
-    gap: 10,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    width: 300,
-    marginHorizontal: 20,
-    alignSelf: "center",
+    flexDirection: "row",
+    width : 100
   },
   cardImg: {
     width: "100%",

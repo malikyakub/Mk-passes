@@ -65,13 +65,15 @@ const styles = StyleSheet.create({
     height: 80,
     flexDirection: "row",
     justifyContent: "space-between",
+    gap: 5,
   },
   textInput: {
     backgroundColor: colors.dark,
     color: colors.light,
     fontSize: 20,
     height: "100%",
-    width: "80%",
+    flex: 1,
+    borderRadius: 5,
     fontFamily: "Jaldi",
   },
   btn: {

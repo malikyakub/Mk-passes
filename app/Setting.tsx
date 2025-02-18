@@ -12,6 +12,7 @@ import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import UserHeader from "@/components/UserHeader";
 import { useRouter } from "expo-router";
+import { ScrollView } from "react-native";
 
 const Userpage = () => {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(false);
@@ -24,7 +25,7 @@ const Userpage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <UserHeader />
-      <View style={styles.hero}>
+      <ScrollView style={styles.hero}>
         <View style={styles.section}>
           <Text style={styles.section_header}>Account Information</Text>
           <TouchableOpacity
@@ -42,7 +43,10 @@ const Userpage = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sub_section}>
+          <TouchableOpacity
+            style={styles.sub_section}
+            onPress={() => router.push("/ChangeEmail")}
+          >
             <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}
@@ -271,7 +275,7 @@ const Userpage = () => {
           </TouchableOpacity>
           <View style={styles.line}></View>
         </View>
-      </View>
+      </ScrollView>
       <BottomNav current={"settings"} />
     </SafeAreaView>
   );

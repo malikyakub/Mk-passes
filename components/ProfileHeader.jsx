@@ -1,16 +1,44 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import React, { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import colors from "@/assets/colors/colors";
 import { useRouter } from "expo-router";
 
 const ProfileHeader = () => {
   const router = useRouter();
-  const [setProfileIsOn, setSetProfileIsOn] = useState(false);
-  const pressHandler = () => {
-    setSetProfileIsOn(!setProfileIsOn);
+  const [profileImage, setProfileImage] = useState(
+    require("@/assets/images/users/user1.png")
+  );
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission Denied",
+        "You need to allow access to the gallery to select an image."
+      );
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfileImage({ uri: result.assets[0].uri });
+    }
   };
 
-  const openFileDialog = () => {};
   return (
     <View style={styles.profile}>
       <TouchableOpacity
@@ -22,37 +50,22 @@ const ProfileHeader = () => {
           source={require("@/assets/Icons/back.png")}
         />
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => pressHandler()}
-        style={styles.pfpConatainer}
-      >
-        {setProfileIsOn ? (
-          <>
-            <Image
-              style={styles.pfp}
-              source={require("@/assets/images/users/user1.png")}
-            />
-            <TouchableOpacity
-              onPress={() => openFileDialog()}
-              style={styles.addProfileContainer}
-            >
-              <Image
-                style={styles.addProfileIcon}
-                source={require("@/assets/Icons/camera.png")}
-              />
-            </TouchableOpacity>
-          </>
-        ) : (
-          <>
-            <Image
-              style={styles.pfp}
-              source={require("@/assets/images/users/user1.png")}
-            />
-          </>
-        )}
-      </TouchableOpacity>
-      <Text style={styles.name}>Malik yakub</Text>
-      <Text style={styles.job}>Front-end developer</Text>
+
+      <View style={styles.pfpContainer}>
+        <Image style={styles.pfp} source={profileImage} />
+        <TouchableOpacity
+          onPress={pickImage}
+          style={styles.addProfileContainer}
+        >
+          <Image
+            style={styles.addProfileIcon}
+            source={require("@/assets/Icons/camera.png")}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.name}>Malik Yakub</Text>
+      <Text style={styles.job}>Front-end Developer</Text>
     </View>
   );
 };
@@ -72,7 +85,7 @@ const styles = StyleSheet.create({
     left: 30,
     top: 20,
   },
-  pfpConatainer: {
+  pfpContainer: {
     position: "relative",
   },
   profile: {
@@ -83,16 +96,18 @@ const styles = StyleSheet.create({
   },
   addProfileContainer: {
     position: "absolute",
-    width: 250,
-    height: 100,
-    backgroundColor: colors.opacity.cyan[50],
+    width: 60,
+    height: 60,
+    backgroundColor: colors.cyan[200],
     justifyContent: "center",
     alignItems: "center",
-    bottom: 0,
+    bottom: 10,
+    right: 10,
+    borderRadius: 30,
   },
   addProfileIcon: {
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
     resizeMode: "contain",
   },
   pfp: {
