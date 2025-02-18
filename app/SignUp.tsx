@@ -23,11 +23,6 @@ const SignUp = () => {
   };
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/logo.png")}
-        style={styles.img}
-        alt="logo"
-      />
       <Text style={styles.welcomingText}>Create an account</Text>
       <View style={styles.hero}>
         <View style={styles.field}>
@@ -174,15 +169,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 15,
-    height: 60,
+    height: 50,
   },
   google_img: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     resizeMode: "contain",
   },
   google_text: {
-    fontSize: 30,
+    fontSize: 25,
     color: colors.dark,
     fontFamily: "Jaldi-bold",
   },
