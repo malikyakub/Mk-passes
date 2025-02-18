@@ -5,6 +5,11 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,40 +19,50 @@ import { useRouter } from "expo-router";
 
 const Profile = () => {
   const [fullName, setFullName] = useState<string>();
-  const [job, setJob] = useState<string>();
+  const [username, setUsername] = useState<string>();
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProfileHeader />
-      <View style={styles.hero}>
-        <View style={styles.field}>
-          <Text style={styles.label}>Full name</Text>
-          <TextInput
-            style={styles.textinput}
-            inputMode="text"
-            placeholder="malik yakub"
-            value={fullName}
-            onChangeText={(newtext) => setFullName(newtext)}
-          />
-        </View>
-        <View style={styles.field}>
-          <Text style={styles.label}>Job</Text>
-          <TextInput
-            style={styles.textinput}
-            inputMode="text"
-            placeholder="Frontend developer"
-            value={job}
-            onChangeText={(newtext) => setJob(newtext)}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.saveBtn}
-          onPress={() => router.push("/Setting")}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
         >
-          <Text style={styles.saveBtnText}>Save</Text>
-        </TouchableOpacity>
-      </View>
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            <ProfileHeader />
+            <View style={styles.hero}>
+              <View style={styles.field}>
+                <Text style={styles.label}>Full name</Text>
+                <TextInput
+                  style={styles.textinput}
+                  inputMode="text"
+                  placeholder="malik yakub"
+                  value={fullName}
+                  onChangeText={(newtext) => setFullName(newtext)}
+                />
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>Username</Text>
+                <TextInput
+                  style={styles.textinput}
+                  inputMode="text"
+                  placeholder="mk-yare"
+                  value={username}
+                  onChangeText={(newtext) => setUsername(newtext)}
+                  autoCapitalize="none"
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.saveBtn}
+                onPress={() => router.push("/Setting")}
+              >
+                <Text style={styles.saveBtnText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
@@ -59,6 +74,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cyan[100],
     flex: 1,
     position: "relative",
+  },
+  scrollView: {
+    flexGrow: 1,
   },
   hero: {
     flex: 1,
@@ -88,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     backgroundColor: colors.cyan[300],
-    marginTop: 100,
+    marginTop: 50,
     alignSelf: "center",
   },
   saveBtnText: {

@@ -19,7 +19,9 @@ const PasswordDetails = () => {
 
   useEffect(() => {
     if (ID) {
-      const foundPassword = passwordJson.find((item) => item.ID === parseInt(ID));
+      const foundPassword = passwordJson.find(
+        (item) => item.ID === parseInt(ID)
+      );
       setPasswordData(foundPassword);
     }
   }, [ID]);
@@ -31,61 +33,72 @@ const PasswordDetails = () => {
         {passwordData ? (
           <>
             <View style={styles.password_header}>
-              <TouchableOpacity style={styles.back_btn} onPress={() => router.back()}>
-                <Image style={styles.back_img} source={require("../../assets/Icons/back.png")} />
+              <TouchableOpacity
+                style={styles.back_btn}
+                onPress={() => router.back()}
+              >
+                <Image
+                  style={styles.back_img}
+                  source={require("../../assets/Icons/back.png")}
+                />
               </TouchableOpacity>
               {imageMap[passwordData.icon] ? (
-                <Image source={imageMap[passwordData.icon]} style={styles.pass_image} />
+                <Image
+                  source={imageMap[passwordData.icon]}
+                  style={styles.pass_image}
+                />
               ) : (
                 <Image
                   source={require("@/assets/Icons/no-profile.png")}
                   style={styles.pass_image}
                 />
               )}
-              <Text style={styles.accountName}>{passwordData["account-name"]}</Text>
+              <Text style={styles.accountName}>
+                {passwordData["account-name"]}
+              </Text>
             </View>
             <View style={styles.card}>
-          <View style={styles.side}></View>
-          <Image
-            style={styles.icon}
-            source={require("@/assets/Icons/key.png")}
-          />
-          <Text style={styles.txt}>Change password</Text>
-          <TouchableOpacity style={styles.next_btn}>
-            <Image
-              style={styles.next_img}
-              source={require("@/assets/Icons/next.png")}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.card}>
-          <View style={styles.side}></View>
-          <Image
-            style={styles.icon}
-            source={require("@/assets/Icons/history.png")}
-          />
-          <Text style={styles.txt}>Review changes</Text>
-          <TouchableOpacity style={styles.next_btn}>
-            <Image
-              style={styles.next_img}
-              source={require("@/assets/Icons/next.png")}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dangerZone}>
-          <View style={styles.D_side}></View>
-          <Image
-            style={styles.icon}
-            source={require("@/assets/Icons/delete.png")}
-          />
-          <Text style={styles.txt}>Delete password</Text>
-          <TouchableOpacity style={styles.next_btn}>
-            <Image
-              style={styles.next_img}
-              source={require("@/assets/Icons/D_next.png")}
-            />
-          </TouchableOpacity>
-        </View>
+              <View style={styles.side}></View>
+              <Image
+                style={styles.icon}
+                source={require("@/assets/Icons/key.png")}
+              />
+              <Text style={styles.txt}>Change password</Text>
+              <TouchableOpacity style={styles.next_btn}>
+                <Image
+                  style={styles.next_img}
+                  source={require("@/assets/Icons/next.png")}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.card}>
+              <View style={styles.side}></View>
+              <Image
+                style={styles.icon}
+                source={require("@/assets/Icons/history.png")}
+              />
+              <Text style={styles.txt}>Review changes</Text>
+              <TouchableOpacity style={styles.next_btn}>
+                <Image
+                  style={styles.next_img}
+                  source={require("@/assets/Icons/next.png")}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.dangerZone}>
+              <View style={styles.D_side}></View>
+              <Image
+                style={styles.icon}
+                source={require("@/assets/Icons/delete.png")}
+              />
+              <Text style={styles.txt}>Delete password</Text>
+              <TouchableOpacity style={styles.next_btn}>
+                <Image
+                  style={styles.next_img}
+                  source={require("@/assets/Icons/D_next.png")}
+                />
+              </TouchableOpacity>
+            </View>
           </>
         ) : (
           <Text style={styles.txt}>No password found for this ID.</Text>
@@ -109,15 +122,15 @@ const styles = StyleSheet.create({
     padding: 20,
     zIndex: 1,
   },
-  back_img : {
-    width : 30,
-    height : 30,
-    resizeMode :'contain',
+  back_img: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
   },
-  back_btn : {
-    position : 'absolute',
-    left : 20,
-    top : 20
+  back_btn: {
+    position: "absolute",
+    left: 20,
+    top: 20,
   },
   password_header: {
     backgroundColor: colors.opacity.cyan[20],
