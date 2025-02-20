@@ -9,10 +9,65 @@ import {
 import React, { useState } from "react";
 import colors from "@/assets/colors/colors";
 import { router } from "expo-router";
+import useAuth from "@/hooks/useAuth";
+import NotificationCard from "@/components/NotificationCard";
+import Entypo from "@expo/vector-icons/Entypo";
+
+interface Notification {
+  message: string;
+  type: string;
+  title: string;
+  is_open: boolean;
+  image_url?: string;
+  action: () => void;
+}
 
 const Login = () => {
-  const [username, setUsername] = useState<string>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const { Login, isloading } = useAuth();
+  const [notification, setNotification] = useState<Notification>({
+    message: "",
+    type: "",
+    title: "",
+    is_open: false,
+    image_url: "",
+    action: () => {},
+  });
+
+  const loginHandler = async () => {
+    if (email && password) {
+      const { err } = await Login(email, password);
+      if (err) {
+        setNotification({
+          message: "Invalid username or password",
+          type: "error",
+          title: "Error",
+          is_open: true,
+          image_url: "",
+          action: () => {},
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+        }, 3000);
+        return;
+      }
+      router.push("/Home");
+    } else {
+      setNotification({
+        message: "Please fill in all fields",
+        type: "error",
+        title: "Error",
+        is_open: true,
+        image_url: "",
+        action: () => {},
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+      }, 3000);
+    }
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -23,24 +78,33 @@ const Login = () => {
       <Text style={styles.welcomingText}>Welcom back</Text>
       <View style={styles.hero}>
         <View style={styles.field}>
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.textinput}
-            secureTextEntry
-            placeholder="username"
-            value={username}
-            onChangeText={(newtext) => setUsername(newtext)}
-          />
+          <Text style={styles.label}>Email</Text>
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Email"
+              value={email}
+              onChangeText={(newtext) => setEmail(newtext)}
+            />
+          </View>
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.textinput}
-            secureTextEntry
-            placeholder="Password"
-            value={password}
-            onChangeText={(newtext) => setPassword(newtext)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              secureTextEntry={!showPassword}
+              placeholder="Password"
+              value={password}
+              onChangeText={(newtext) => setPassword(newtext)}
+            />
+            <Entypo
+              name={showPassword ? "eye" : "eye-with-line"}
+              size={24}
+              color={colors.dark}
+              onPress={() => setShowPassword(!showPassword)}
+            />
+          </View>
         </View>
         <View style={styles.field}>
           <TouchableOpacity onPress={() => router.push("/ForgetPassword")}>
@@ -61,11 +125,10 @@ const Login = () => {
           <Text style={styles.google_text}>Continue with Google</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.startBtn}
-        onPress={() => router.push("/Home")}
-      >
-        <Text style={styles.startText}>Start</Text>
+      <TouchableOpacity style={styles.startBtn} onPress={loginHandler}>
+        <Text style={styles.startText}>
+          {isloading ? "Logining in..." : "Login"}
+        </Text>
       </TouchableOpacity>
       <View style={styles.SignUp}>
         <Text style={styles.SignUpText}>Don't have an account?</Text>
@@ -73,6 +136,19 @@ const Login = () => {
           <Text style={styles.SignUpLink}>Sign up</Text>
         </TouchableOpacity>
       </View>
+      {notification.is_open && (
+        <NotificationCard
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          is_open={notification.is_open}
+          image_url={notification.image_url}
+          action={notification.action}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, is_open: false }))
+          }
+        />
+      )}
     </View>
   );
 };
@@ -110,13 +186,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.dark,
   },
-  textinput: {
+  input: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: colors.opacity.dark[20],
+    borderRadius: 5,
+    padding: 5,
+    gap: 5,
+  },
+  textinput: {
     color: colors.dark,
     paddingLeft: 8,
     fontSize: 20,
     fontFamily: "Jaldi",
-    borderRadius: 5,
+    flex: 1,
   },
   Or: {
     display: "flex",
@@ -144,15 +229,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 15,
-    height: 60,
+    height: 50,
   },
   google_img: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     resizeMode: "contain",
   },
   google_text: {
-    fontSize: 30,
+    fontSize: 25,
     color: colors.dark,
     fontFamily: "Jaldi-bold",
   },

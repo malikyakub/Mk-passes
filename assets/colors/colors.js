@@ -1,4 +1,11 @@
 export default {
+  notifications: {
+    success: "#4CAF50",
+    info: "#2196F3",
+    error: "#F44336",
+    warning: "#FFC107",
+    default: "#607D8B",
+  },
   cyan: {
     100: "#B1F0F7",
     200: "#81BFDA",
