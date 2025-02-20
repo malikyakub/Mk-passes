@@ -9,68 +9,208 @@ import {
 import React, { useState } from "react";
 import colors from "@/assets/colors/colors";
 import { router } from "expo-router";
+import useAuth from "@/hooks/useAuth";
+import uuid from "react-native-uuid";
+import NotificationCard from "@/components/NotificationCard";
+import Entypo from "@expo/vector-icons/Entypo";
 
-const SignUp = () => {
-  const [form, setForm] = useState({
+interface Notification {
+  message: string;
+  type: string;
+  title: string;
+  is_open: boolean;
+  image_url?: string;
+  action: () => void;
+}
+
+const SignUp: React.FC = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [notification, setNotification] = useState<Notification>({
+    message: "",
+    type: "",
+    title: "",
+    is_open: false,
+    image_url: "",
+    action: () => {},
+  });
+
+  const [form, setForm] = useState<{
+    fullname: string;
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+  }>({
     fullname: "",
     email: "",
     username: "",
     password: "",
+    confirmPassword: "",
   });
 
-  const handleChange = (name: string, value: string) => {
+  const { CreateNewUser, isloading } = useAuth();
+
+  const handleChange = (name: keyof typeof form, value: string) => {
     setForm({ ...form, [name]: value });
   };
+
+  const handleSignUp = async () => {
+    if (
+      form.fullname === "" ||
+      form.email === "" ||
+      form.username === "" ||
+      form.password === ""
+    ) {
+      setNotification({
+        title: "Warning",
+        message: "All fields are required",
+        type: "warning",
+        is_open: true,
+        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+      }, 3000);
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setNotification({
+        title: "Error",
+        message: "Passwords do not match",
+        type: "error",
+        is_open: true,
+        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+      }, 3000);
+      return;
+    }
+
+    const newUser = {
+      id: uuid.v4(),
+      fullname: form.fullname,
+      email: form.email,
+      username: form.username,
+      password: form.password,
+    };
+
+    const { err } = await CreateNewUser(newUser);
+    if (err) {
+      if (err.charCodeAt(0) === 100) {
+        setNotification({
+          title: "Warning",
+          message: "User with this email already exists",
+          type: "warning",
+          is_open: true,
+          action: () =>
+            setNotification((prev) => ({ ...prev, is_open: false })),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+        }, 3000);
+      } else {
+        setNotification({
+          title: "Error",
+          message: "An error occured",
+          type: "error",
+          is_open: true,
+          action: () =>
+            setNotification((prev) => ({ ...prev, is_open: false })),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+        });
+      }
+      return;
+    }
+
+    setNotification({
+      title: "Success",
+      message: "Account created successfully",
+      type: "success",
+      is_open: true,
+      action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+    });
+    setTimeout(() => {
+      setNotification((prev) => ({ ...prev, is_open: false }));
+    }, 3000);
+    router.push("/Home");
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcomingText}>Create an account</Text>
       <View style={styles.hero}>
         <View style={styles.field}>
           <Text style={styles.label}>Full Name</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Full Name"
-            value={form.fullname}
-            onChangeText={(value) => handleChange("fullname", value)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Full Name"
+              value={form.fullname}
+              onChangeText={(value) => handleChange("fullname", value)}
+            />
+          </View>
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Email"
-            value={form.email}
-            onChangeText={(value) => handleChange("email", value)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Email"
+              value={form.email}
+              onChangeText={(value) => handleChange("email", value)}
+            />
+          </View>
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Username"
-            value={form.username}
-            onChangeText={(value) => handleChange("username", value)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Username"
+              value={form.username}
+              onChangeText={(value) => handleChange("username", value)}
+            />
+          </View>
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>Create password</Text>
-          <TextInput
-            style={styles.textinput}
-            secureTextEntry
-            placeholder="Create password"
-            value={form.password}
-            onChangeText={(value) => handleChange("password", value)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              secureTextEntry={!showPassword}
+              placeholder="Create password"
+              value={form.password}
+              onChangeText={(value) => handleChange("password", value)}
+            />
+            <Entypo
+              name={showPassword ? "eye" : "eye-with-line"}
+              size={24}
+              color={colors.dark}
+              onPress={() => setShowPassword(!showPassword)}
+            />
+          </View>
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>Confirm password</Text>
-          <TextInput
-            style={styles.textinput}
-            secureTextEntry
-            placeholder="Confirm password"
-            value={form.password}
-            onChangeText={(value) => handleChange("password", value)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textinput}
+              secureTextEntry={!showPassword}
+              placeholder="Confirm password"
+              value={form.confirmPassword}
+              onChangeText={(value) => handleChange("confirmPassword", value)}
+            />
+            <Entypo
+              name={showPassword ? "eye" : "eye-with-line"}
+              size={24}
+              color={colors.dark}
+              onPress={() => setShowPassword(!showPassword)}
+            />
+          </View>
         </View>
 
         <View style={styles.Or}>
@@ -86,11 +226,10 @@ const SignUp = () => {
           <Text style={styles.google_text}>Continue with Google</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.startBtn}
-        onPress={() => router.push("/Home")}
-      >
-        <Text style={styles.startText}>Start</Text>
+      <TouchableOpacity style={styles.startBtn} onPress={handleSignUp}>
+        <Text style={styles.startText}>
+          {isloading ? "Creating..." : "Create account"}
+        </Text>
       </TouchableOpacity>
       <View style={styles.Login}>
         <Text style={styles.LoginText}>Already have an account?</Text>
@@ -98,6 +237,19 @@ const SignUp = () => {
           <Text style={styles.LoginLink}>Login</Text>
         </TouchableOpacity>
       </View>
+      {notification.is_open && (
+        <NotificationCard
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          is_open={notification.is_open}
+          image_url={notification.image_url}
+          action={notification.action}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, is_open: false }))
+          }
+        />
+      )}
     </View>
   );
 };
@@ -110,12 +262,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cyan[100],
     justifyContent: "center",
     alignItems: "center",
-  },
-  img: {
-    width: 180,
-    height: 180,
-    resizeMode: "contain",
-    marginBottom: 25,
+    height: "100%",
   },
   welcomingText: {
     fontSize: 40,
@@ -135,13 +282,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.dark,
   },
-  textinput: {
+  input: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: colors.opacity.dark[20],
+    borderRadius: 5,
+    padding: 5,
+    gap: 5,
+  },
+  textinput: {
     color: colors.dark,
     paddingLeft: 8,
     fontSize: 20,
     fontFamily: "Jaldi",
-    borderRadius: 5,
+    flex: 1,
   },
   Or: {
     display: "flex",
@@ -183,7 +339,7 @@ const styles = StyleSheet.create({
   },
   startBtn: {
     paddingVertical: 15,
-    width: 150,
+    width: 200,
     borderRadius: 30,
     alignItems: "center",
     backgroundColor: colors.cyan[300],
@@ -192,11 +348,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 30,
     fontFamily: "Jaini",
-  },
-  forgotPasswordText: {
-    color: colors.cyan[300],
-    textAlign: "right",
-    fontFamily: "Jaldi",
   },
   Login: {
     display: "flex",
