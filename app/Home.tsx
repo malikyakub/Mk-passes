@@ -13,9 +13,8 @@ import colors from "../assets/colors/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
-import HeroCards from "../components/HeroCards";
+import HeroCard from "../components/HeroCard";
 import { router } from "expo-router";
-import HomeCard from "@/components/HomeCard";
 
 const Home = () => {
   const card = [
@@ -52,7 +51,13 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        <HomeCard title={"Mk-passes"} body={"With"} />
+        <HeroCard
+          title={"Mk-passes"}
+          body={"With"}
+          image_url={
+            "https://i.pinimg.com/474x/f3/90/a6/f390a69c051dc2a1f7d8f322c96b0fa4.jpg"
+          }
+        />
 
         <ScrollView style={styles.cards} showsVerticalScrollIndicator={false}>
           <View style={styles.card}>

@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import TextOut from "@/components/TextOut";
 import useLFam from "@/hooks/useL-Fam";
 import { useState, useMemo } from "react";
+import HeroCard from "@/components/HeroCard";
 
 const Encryption = () => {
   const [text, setText] = useState("");
@@ -17,7 +18,13 @@ const Encryption = () => {
     <SafeAreaView style={styles.container}>
       <Header />
       <ScrollView contentContainerStyle={styles.hero}>
-        <TextOut msg={encryptedText} placeholder={"Encrypted"} />
+        <HeroCard
+          image_url={
+            "https://i.pinimg.com/474x/ce/fd/43/cefd4337d888fca5ea68f0ab1bb9adcc.jpg"
+          }
+          title={"Mk-Passes"}
+          body={"Encrypt with "}
+        />
         <View style={styles.textCont}>
           <TextInput
             inputMode="text"
@@ -28,6 +35,7 @@ const Encryption = () => {
             onChangeText={setText}
           />
         </View>
+        <TextOut msg={encryptedText} placeholder={"Encrypted"} />
       </ScrollView>
       <View>
         <BottomNav current={"encryption"} />
@@ -46,13 +54,12 @@ const styles = StyleSheet.create({
   },
   hero: {
     flex: 1,
-    paddingHorizontal: 20,
-    justifyContent: "center",
+    padding: 20,
     zIndex: 1,
   },
   textCont: {
     backgroundColor: "#000",
-    marginTop: 20,
+    marginBlock: 20,
     padding: 10,
     borderWidth: 1,
     borderRadius: 5,
