@@ -24,6 +24,12 @@ const AddPassword = () => {
   const [digits, setDigits] = useState<number | null>(null);
   const [password, setPassword] = useState<string>("");
 
+  const { LFam } = PasswordGenerator({
+    accountName,
+    username: userName,
+    digits,
+  });
+
   const pressHandler = (opt: number) => {
     setActionIsLFam(opt === 1);
     setIsActionCalled(true);
@@ -35,14 +41,9 @@ const AddPassword = () => {
 
   useEffect(() => {
     if (actionIsLFam && accountName && userName) {
-      const { LFam } = PasswordGenerator({
-        accountName,
-        username: userName,
-        digits,
-      });
       const generatedPassword = LFam();
       setPassword(generatedPassword);
-      setDigits(generatedPassword.length);
+      // setDigits(generatedPassword.length);
     }
   }, [accountName, userName, actionIsLFam]);
 

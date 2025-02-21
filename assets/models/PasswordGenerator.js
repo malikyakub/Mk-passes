@@ -6,43 +6,36 @@ function PasswordGenerator({ digits, username, accountName }) {
     }
 
     function encryptText(text) {
-      let processedMessage = text
-        .toUpperCase()
-        .split(" ")
-        .map((word) =>
-          word
-            .split("")
-            .map((char) => {
-              if (!isNaN(char)) {
-                return; // Ignore numbers
-              }
-              const charIndex = eng_alphabets.indexOf(char) + 1;
-              return charIndex > 0 ? charIndex.toString(16).toUpperCase() : "";
-            })
-            .filter(Boolean)
-            .join(".")
-        )
-        .join("+");
+      let processedMessage = "";
 
-      // Remove trailing "+" or "."
-      if (processedMessage.endsWith("+")) {
-        processedMessage = processedMessage.slice(0, -1);
+      for (let char of text.toUpperCase()) {
+        if (char === " ") {
+          processedMessage += "+";
+        } else {
+          const charIndex = eng_alphabets.indexOf(char) + 1;
+          if (charIndex > 0) {
+            processedMessage += `${charIndex.toString(16).toUpperCase()}.`;
+          }
+        }
       }
+
       if (processedMessage.endsWith(".")) {
         processedMessage = processedMessage.slice(0, -1);
       }
+
+      processedMessage = processedMessage
+        .replace(/\./g, "-")
+        .replace(/\+/g, "----");
+
+      processedMessage = processedMessage.replace(/----+/g, "----");
 
       return processedMessage;
     }
 
     const randomSelection = Math.random() < 0.5 ? username : accountName;
     const encryptedPassword = encryptText(randomSelection);
-    if (encryptedPassword.length < 6) {
-      return;
-    }
-    return encryptedPassword;
 
-    // console.log("Generated Encrypted Password:", encryptedPassword);
+    return encryptedPassword;
   }
 
   function Manual() {
