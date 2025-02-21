@@ -13,6 +13,8 @@ import colors from "@/assets/colors/colors";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ConfirmCard from "@/components/ConfirmCard";
+import NotificationCard from "@/components/NotificationCard";
 
 const imageMap = {
   youtube: require("@/assets/api/images/youtube.png"),
@@ -22,7 +24,22 @@ const imageMap = {
 const PasswordDetails = () => {
   const { ID } = useLocalSearchParams();
   const [password, setPassword] = useState(null);
-  const { GetPassword, isloading } = usePasswords();
+  const { GetPassword, isloading, DeletePassword } = usePasswords();
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "",
+    title: "",
+    is_open: false,
+    image_url: "",
+    action: () => {},
+  });
+  const [confirmDialog, setConfirmDialog] = useState({
+    is_open: false,
+    title: "",
+    message: "",
+    onAccept: () => {},
+    onCancel: () => {},
+  });
 
   useEffect(() => {
     const fetchPassword = async () => {
@@ -38,6 +55,48 @@ const PasswordDetails = () => {
 
     fetchPassword();
   }, [ID]);
+
+  const deleteHandler = () => {
+    setConfirmDialog({
+      is_open: true,
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete this password?",
+      onAccept: async () => {
+        const { err } = DeletePassword(ID);
+        if (err) {
+          setNotification({
+            title: "Error",
+            message: "Error happened",
+            type: "error",
+            is_open: true,
+            action: () =>
+              setNotification((prev) => ({ ...prev, is_open: false })),
+          });
+          setTimeout(() => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+          }, 3000);
+          return;
+        }
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+        setNotification({
+          title: "Deleted successfully",
+          message:
+            "the password " + password.password + " deleted duccesifully",
+          type: "success",
+          is_open: true,
+          action: () => setNotification(router.push("/Passwords")),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          router.push("/Passwords");
+        }, 3000);
+        return;
+      },
+      onCancel: () => {
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -105,7 +164,7 @@ const PasswordDetails = () => {
                 source={require("@/assets/Icons/delete.png")}
               />
               <Text style={styles.txt}>Delete password</Text>
-              <TouchableOpacity style={styles.next_btn}>
+              <TouchableOpacity style={styles.next_btn} onPress={deleteHandler}>
                 <Image
                   style={styles.next_img}
                   source={require("@/assets/Icons/D_next.png")}
@@ -118,6 +177,28 @@ const PasswordDetails = () => {
         )}
       </View>
       <BottomNav current={"passwords"} />
+
+      {notification.is_open && (
+        <NotificationCard
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          is_open={notification.is_open}
+          image_url={notification.image_url}
+          action={notification.action}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, is_open: false }))
+          }
+        />
+      )}
+
+      <ConfirmCard
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        is_open={confirmDialog.is_open}
+        onClose={() => setConfirmDialog({ ...confirmDialog, is_open: false })}
+        onAccept={confirmDialog.onAccept}
+      />
     </SafeAreaView>
   );
 };
