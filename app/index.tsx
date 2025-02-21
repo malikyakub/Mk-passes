@@ -12,7 +12,7 @@ const index = () => {
       <Intro />
       <TouchableOpacity
         style={styles.startBtn}
-        onPress={() => router.push("/Login")}
+        onPress={() => router.push("/AddPassowrd")}
       >
         <Text style={styles.startText}>Start</Text>
       </TouchableOpacity>

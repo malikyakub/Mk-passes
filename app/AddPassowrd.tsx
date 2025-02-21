@@ -6,22 +6,22 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import { useRouter } from "expo-router";
+import PasswordGenerator from "@/assets/models/PasswordGenerator";
 
 const AddPassword = () => {
   const [isActionCalled, setIsActionCalled] = useState(false);
   const [actionIsLFam, setActionIsLFam] = useState<boolean | null>(null);
   const router = useRouter();
 
-  // Input states
   const [accountName, setAccountName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-  const [digits, setDigits] = useState<number | null>(null); // Numeric value
+  const [digits, setDigits] = useState<number | null>(null);
   const [password, setPassword] = useState<string>("");
 
   const pressHandler = (opt: number) => {
@@ -30,14 +30,21 @@ const AddPassword = () => {
   };
 
   const handleAddPress = () => {
-    console.log({
-      accountName,
-      userName,
-      digits,
-      password,
-    });
-    router.push("/Passwords");
+    console.log("Manual creation or other actions");
   };
+
+  useEffect(() => {
+    if (actionIsLFam && accountName && userName) {
+      const { LFam } = PasswordGenerator({
+        accountName,
+        username: userName,
+        digits,
+      });
+      const generatedPassword = LFam();
+      setPassword(generatedPassword);
+      setDigits(generatedPassword.length);
+    }
+  }, [accountName, userName, actionIsLFam]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,6 +82,7 @@ const AddPassword = () => {
               <Text style={styles.label}>Number of Digits</Text>
               <TextInput
                 style={styles.textinput}
+                editable={!actionIsLFam}
                 inputMode="numeric"
                 placeholder="12"
                 value={digits?.toString() || ""}
@@ -164,9 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.dark,
   },
-  form: {
-    // Form container
-  },
+  form: {},
   label: {
     fontFamily: "jaldi",
     fontSize: 20,
