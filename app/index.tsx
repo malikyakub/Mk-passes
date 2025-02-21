@@ -1,26 +1,44 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../assets/colors/colors";
 import Intro from "../components/Intro";
 import { useRouter } from "expo-router";
+import useAuth from "../hooks/useAuth";
 
-const index = () => {
+const Index = () => {
   const router = useRouter();
+  const { GetLoggedInUser, isloading } = useAuth();
+
+  const checkUser = async () => {
+    const user = await GetLoggedInUser();
+    if (user) {
+      router.push("/Home");
+    } else {
+      router.push("/Login");
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Intro />
-      <TouchableOpacity
-        style={styles.startBtn}
-        onPress={() => router.push("/AddPassowrd")}
-      >
-        <Text style={styles.startText}>Start</Text>
+      <TouchableOpacity style={styles.startBtn} onPress={checkUser}>
+        {isloading ? (
+          <ActivityIndicator size={30} color={colors.light} />
+        ) : (
+          <Text style={styles.startText}>Start</Text>
+        )}
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-export default index;
+export default Index;
 
 const styles = StyleSheet.create({
   container: {

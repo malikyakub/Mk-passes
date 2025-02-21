@@ -135,8 +135,8 @@ const SignUp: React.FC = () => {
     });
     setTimeout(() => {
       setNotification((prev) => ({ ...prev, is_open: false }));
+      router.push("/Home");
     }, 3000);
-    router.push("/Home");
   };
 
   return (

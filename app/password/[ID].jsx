@@ -1,36 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import passwordJson from "@/assets/api/passwords.json";
+import usePasswords from "@/hooks/usePasswords";
 import colors from "@/assets/colors/colors";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { routeToScreen } from "expo-router/build/useScreens";
 
 const imageMap = {
-  "youtube.png": require("@/assets/api/images/youtube.png"),
-  "facebook.png": require("@/assets/api/images/facebook.png"),
+  youtube: require("@/assets/api/images/youtube.png"),
+  facebook: require("@/assets/api/images/facebook.png"),
 };
 
 const PasswordDetails = () => {
   const { ID } = useLocalSearchParams();
-  const [passwordData, setPasswordData] = useState(null);
+  const [password, setPassword] = useState(null);
+  const { GetPassword, isloading } = usePasswords();
 
   useEffect(() => {
-    if (ID) {
-      const foundPassword = passwordJson.find(
-        (item) => item.ID === parseInt(ID)
-      );
-      setPasswordData(foundPassword);
-    }
+    const fetchPassword = async () => {
+      if (ID) {
+        const { data, err } = await GetPassword(ID);
+        if (err) {
+          console.error("Error fetching password:", err);
+        } else {
+          setPassword(data);
+        }
+      }
+    };
+
+    fetchPassword();
   }, [ID]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        {passwordData ? (
+        {isloading ? (
+          <ActivityIndicator size="large" color={colors.cyan[300]} />
+        ) : password ? (
           <>
             <View style={styles.password_header}>
               <TouchableOpacity
@@ -42,9 +57,9 @@ const PasswordDetails = () => {
                   source={require("../../assets/Icons/back.png")}
                 />
               </TouchableOpacity>
-              {imageMap[passwordData.icon] ? (
+              {imageMap[password.icon] ? (
                 <Image
-                  source={imageMap[passwordData.icon]}
+                  source={imageMap[password.icon]}
                   style={styles.pass_image}
                 />
               ) : (
@@ -53,9 +68,7 @@ const PasswordDetails = () => {
                   style={styles.pass_image}
                 />
               )}
-              <Text style={styles.accountName}>
-                {passwordData["account-name"]}
-              </Text>
+              <Text style={styles.accountName}>{password.account_name}</Text>
             </View>
             <View style={styles.card}>
               <View style={styles.side}></View>
@@ -149,24 +162,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     fontFamily: "Jaini",
-    color: colors.dark,
-  },
-  password_info: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 15,
-    paddingHorizontal: 10,
-  },
-  label: {
-    fontSize: 18,
-    fontFamily: "jaldi",
-    fontWeight: "bold",
-    color: colors.dark,
-    marginRight: 10,
-  },
-  txt: {
-    fontSize: 18,
-    fontFamily: "jaldi",
     color: colors.dark,
   },
   card: {

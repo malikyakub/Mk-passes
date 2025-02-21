@@ -5,8 +5,8 @@ import { router } from "expo-router";
 
 // Map your icons to local image paths
 const imageMap = {
-  "youtube.png": require("@/assets/api/images/youtube.png"),
-  "facebook.png": require("@/assets/api/images/facebook.png"),
+  youtube: require("@/assets/api/images/youtube.png"),
+  facebook: require("@/assets/api/images/facebook.png"),
 };
 
 const PasswordCard = ({
@@ -18,7 +18,6 @@ const PasswordCard = ({
   icon,
 }) => {
   const pressHandler = (id) => {
-    console.log("ID: ", id);
     router.push(`../password/${id}`);
   };
   return (
