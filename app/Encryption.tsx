@@ -1,40 +1,34 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextOut from "@/components/TextOut";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useState } from "react";
+import useLFam from "@/hooks/useL-Fam";
+import { useState, useMemo } from "react";
 
 const Encryption = () => {
   const [text, setText] = useState("");
+  const { encryptText } = useLFam();
+
+  const encryptedText = useMemo(() => encryptText(text), [text]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.hero}>
-        <TextOut msg={text} placeholder={"Encrypted"} />
+      <ScrollView contentContainerStyle={styles.hero}>
+        <TextOut msg={encryptedText} placeholder={"Encrypted"} />
         <View style={styles.textCont}>
           <TextInput
             inputMode="text"
-            placeholder="your message"
+            placeholder="Your message"
             placeholderTextColor={colors.light}
             style={styles.textInput}
             value={text}
-            onChangeText={(newText) => setText(newText)}
+            onChangeText={setText}
           />
-          <TouchableOpacity style={styles.btn} onPress={() => setText("")}>
-            <MaterialIcons name="clear" size={24} color={colors.cyan[300]} />
-            <Text style={styles.btnText}>clear</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
       <View>
         <BottomNav current={"encryption"} />
       </View>
@@ -75,20 +69,5 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 5,
     fontFamily: "Jaldi",
-  },
-  btn: {
-    backgroundColor: colors.cyan[200],
-    flexDirection: "row",
-    gap: 5,
-    alignItems: "center",
-    padding: 5,
-    borderRadius: 5,
-    width: 80,
-  },
-  btnText: {
-    fontSize: 20,
-    fontFamily: "Jaldi",
-    fontWeight: "bold",
-    color: colors.dark,
   },
 });
