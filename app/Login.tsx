@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   Image,
   StyleSheet,
   Text,
@@ -6,28 +7,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import colors from "@/assets/colors/colors";
 import { router } from "expo-router";
 import useAuth from "@/hooks/useAuth";
 import NotificationCard from "@/components/NotificationCard";
 import Entypo from "@expo/vector-icons/Entypo";
-
-interface Notification {
-  message: string;
-  type: string;
-  title: string;
-  is_open: boolean;
-  image_url?: string;
-  action: () => void;
-}
+import { useFocusEffect } from "@react-navigation/native";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const { Login, isloading } = useAuth();
-  const [notification, setNotification] = useState<Notification>({
+  const [notification, setNotification] = useState({
     message: "",
     type: "",
     title: "",
@@ -35,6 +28,22 @@ const Login = () => {
     image_url: "",
     action: () => {},
   });
+
+  // Handle back button press
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        router.replace("/");
+        return true;
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [])
+  );
 
   const loginHandler = async () => {
     if (email && password) {
@@ -68,6 +77,7 @@ const Login = () => {
       }, 3000);
     }
   };
+
   return (
     <View style={styles.container}>
       <Image
@@ -75,7 +85,7 @@ const Login = () => {
         style={styles.img}
         alt="logo"
       />
-      <Text style={styles.welcomingText}>Welcom back</Text>
+      <Text style={styles.welcomingText}>Welcome back</Text>
       <View style={styles.hero}>
         <View style={styles.field}>
           <Text style={styles.label}>Email</Text>
@@ -127,7 +137,7 @@ const Login = () => {
       </View>
       <TouchableOpacity style={styles.startBtn} onPress={loginHandler}>
         <Text style={styles.startText}>
-          {isloading ? "Logining in..." : "Login"}
+          {isloading ? "Logging in..." : "Login"}
         </Text>
       </TouchableOpacity>
       <View style={styles.SignUp}>

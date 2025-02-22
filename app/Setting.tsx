@@ -6,13 +6,42 @@ import {
   Switch,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import UserHeader from "@/components/UserHeader";
 import { useRouter } from "expo-router";
 import { ScrollView } from "react-native";
+import useAuth from "@/hooks/useAuth";
+import useUsers from "@/hooks/useUsers";
+import NotificationCard from "@/components/NotificationCard";
+import ConfirmCard from "@/components/ConfirmCard";
+import usePasswords from "@/hooks/usePasswords";
+
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  username: string;
+}
+
+interface Notification {
+  message: string;
+  type: string;
+  title: string;
+  is_open: boolean;
+  image_url?: string;
+  action: () => void;
+}
+
+interface ConfirmCard {
+  is_open: boolean;
+  title: string;
+  message: string;
+  onClose: () => void;
+  onAccept: () => void;
+}
 
 const Userpage = () => {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(false);
@@ -21,6 +50,109 @@ const Userpage = () => {
   const [appThemeLight, setAppThemeLight] = useState(false);
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const router = useRouter();
+  const { GetLoggedInUser, isloading, Logout } = useAuth();
+  const { DeleteUser } = useUsers();
+  const { DeletePasswordsByUser } = usePasswords();
+  const [user, setUser] = useState<User>();
+  const [notification, setNotification] = useState<Notification>({
+    message: "",
+    type: "",
+    title: "",
+    is_open: false,
+    image_url: "",
+    action: () => {},
+  });
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmCard>({
+    is_open: false,
+    title: "",
+    message: "",
+    onAccept: () => {},
+    onClose: () => {},
+  });
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
+  }, []);
+
+  const logoutHandler = async () => {
+    setConfirmDialog({
+      is_open: true,
+      title: "Logout",
+      message: "Are you sure you want to logout from this account",
+      onAccept: async () => {
+        await Logout();
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+        router.push("/Login");
+      },
+      onClose: () => {
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+      },
+    });
+  };
+
+  const deletHandler = async () => {
+    if (!user?.id) {
+      setNotification({
+        title: "Delete account",
+        message: "User ID not found",
+        type: "error",
+        is_open: true,
+        action: () => router.push("/Login"),
+      });
+      return;
+    }
+
+    setConfirmDialog({
+      is_open: true,
+      title: "Delete account",
+      message: "Your account will be deleted as well as all your data",
+      onAccept: async () => {
+        const { err: passwordDeleteErr } = await DeletePasswordsByUser(user.id);
+        if (passwordDeleteErr) {
+          console.log(passwordDeleteErr);
+        }
+
+        const { err: userDeleteErr } = await DeleteUser(user.id);
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+
+        if (userDeleteErr) {
+          console.log(userDeleteErr);
+          setNotification({
+            title: "Delete account",
+            message: userDeleteErr,
+            type: "error",
+            is_open: true,
+            action: () =>
+              setNotification((prev) => ({ ...prev, is_open: false })),
+          });
+          setTimeout(() => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+          }, 3000);
+          return;
+        }
+
+        await Logout();
+        setNotification({
+          title: "Success",
+          message: "Account deleted successfully",
+          type: "success",
+          is_open: true,
+          action: () => router.push("/Login"),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          router.push("/Login");
+        }, 3000);
+      },
+      onClose: () => {
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -240,7 +372,7 @@ const Userpage = () => {
         </View>
         <View style={styles.section}>
           <Text style={styles.section_header_Danger}>Danger zone</Text>
-          <TouchableOpacity style={styles.sub_section}>
+          <TouchableOpacity style={styles.sub_section} onPress={logoutHandler}>
             <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}
@@ -262,7 +394,7 @@ const Userpage = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sub_section}>
+          <TouchableOpacity style={styles.sub_section} onPress={deletHandler}>
             <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}
@@ -277,6 +409,27 @@ const Userpage = () => {
         </View>
       </ScrollView>
       <BottomNav current={"settings"} />
+      {notification.is_open && (
+        <NotificationCard
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          is_open={notification.is_open}
+          image_url={notification.image_url}
+          action={notification.action}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, is_open: false }))
+          }
+        />
+      )}
+
+      <ConfirmCard
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        is_open={confirmDialog.is_open}
+        onClose={() => setConfirmDialog({ ...confirmDialog, is_open: false })}
+        onAccept={confirmDialog.onAccept}
+      />
     </SafeAreaView>
   );
 };

@@ -1,10 +1,21 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import colors from "../assets/colors/colors";
 import { StatusBar } from "expo-status-bar";
 import HeaderBtns from "./HeaderBtns";
+import useAuth from "@/hooks/useAuth";
 
 const Header = () => {
+  const { GetLoggedInUser, isloading } = useAuth();
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
