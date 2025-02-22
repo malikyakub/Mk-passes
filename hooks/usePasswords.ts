@@ -6,6 +6,7 @@ interface ReturnType {
   err: string | null;
 }
 
+
 const usePasswords = () => {
   const [isloading, setisloading] = useState(false);
 
@@ -48,19 +49,6 @@ const usePasswords = () => {
     }
   }
 
-  async function DeletePasswordsByUser(userId: string): Promise<ReturnType> {
-    setisloading(true);
-    try {
-      const { error } = await supabase.from("passwords").delete().eq("user_id", userId);
-      setisloading(false);
-      if (error) return { data: null, err: error.message };
-      return { data: "All passwords deleted successfully", err: null };
-    } catch (error: unknown) {
-      setisloading(false);
-      return { data: null, err: String(error) };
-    }
-  }
-
   async function GetPasswords(userId?: string): Promise<ReturnType> {
     setisloading(true);
     try {
@@ -68,7 +56,7 @@ const usePasswords = () => {
         .from("passwords")
         .select("*")
         .eq("user_id", userId);
-
+  
       setisloading(false);
       if (error) return { data: null, err: error.message };
       return { data, err: null };
@@ -77,7 +65,8 @@ const usePasswords = () => {
       return { data: null, err: String(error) };
     }
   }
-
+  
+  
   async function GetPassword(id: string): Promise<ReturnType> {
     setisloading(true);
     try {
@@ -91,13 +80,28 @@ const usePasswords = () => {
     }
   }
 
+  async function DeleteAllPasswords(userId: string): Promise<ReturnType> {
+    setisloading(true);
+    try {
+      const { error } = await supabase.from("passwords").delete().eq("user_id", userId);
+      setisloading(false);
+      if (error) return { data: null, err: error.message };
+      return { data: "All passwords deleted successfully", err: null };
+    } catch (error: unknown) {
+      setisloading(false);
+      return { data: null, err: String(error) };
+    }
+  }
+  
+  
+
   return {
     CreateNewPassword,
     UpdatePassword,
     DeletePassword,
-    DeletePasswordsByUser,
     GetPasswords,
     GetPassword,
+    DeleteAllPasswords,
     isloading,
   };
 };

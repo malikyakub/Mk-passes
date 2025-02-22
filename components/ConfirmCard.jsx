@@ -59,13 +59,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Jaldi-bold",
-    fontSize: 40,
+    fontSize: 38,
     color: colors.cyan[300],
   },
   message: {
     fontFamily: "Jaldi",
     fontSize: 20,
     color: colors.dark,
+    textAlign: "center",
   },
   buttons: {
     display: "flex",

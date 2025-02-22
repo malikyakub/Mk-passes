@@ -52,7 +52,7 @@ const Userpage = () => {
   const router = useRouter();
   const { GetLoggedInUser, isloading, Logout } = useAuth();
   const { DeleteUser } = useUsers();
-  const { DeletePasswordsByUser } = usePasswords();
+  const { DeleteAllPasswords } = usePasswords();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
     message: "",
@@ -82,7 +82,7 @@ const Userpage = () => {
     setConfirmDialog({
       is_open: true,
       title: "Logout",
-      message: "Are you sure you want to logout from this account",
+      message: "Are you sure you want to logout from this account?",
       onAccept: async () => {
         await Logout();
         setConfirmDialog({ ...confirmDialog, is_open: false });
@@ -109,9 +109,10 @@ const Userpage = () => {
     setConfirmDialog({
       is_open: true,
       title: "Delete account",
-      message: "Your account will be deleted as well as all your data",
+      message:
+        "Are you sure you wanna delete your account along side all your data?",
       onAccept: async () => {
-        const { err: passwordDeleteErr } = await DeletePasswordsByUser(user.id);
+        const { err: passwordDeleteErr } = await DeleteAllPasswords(user.id);
         if (passwordDeleteErr) {
           console.log(passwordDeleteErr);
         }
@@ -146,6 +147,58 @@ const Userpage = () => {
         setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Login");
+        }, 3000);
+      },
+      onClose: () => {
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+      },
+    });
+  };
+
+  const clearHandler = async () => {
+    if (!user?.id) {
+      setNotification({
+        title: "Clear Passwords",
+        message: "User ID not found",
+        type: "error",
+        is_open: true,
+        action: () => router.push("/Login"),
+      });
+      return;
+    }
+
+    setConfirmDialog({
+      is_open: true,
+      title: "Clear Passwords",
+      message: "Are you sure you wanna clear all your passwords?",
+      onAccept: async () => {
+        setConfirmDialog({ ...confirmDialog, is_open: false });
+        const { data, err } = await DeleteAllPasswords(user.id);
+        if (err) {
+          console.log(err);
+          setNotification({
+            title: "Clear passwords",
+            message: err,
+            type: "error",
+            is_open: true,
+            action: () =>
+              setNotification((prev) => ({ ...prev, is_open: false })),
+          });
+          setTimeout(() => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+          }, 3000);
+          return;
+        }
+        setNotification({
+          title: "Clear passwords",
+          message: data,
+          type: "success",
+          is_open: true,
+          action: () =>
+            setNotification((prev) => ({ ...prev, is_open: false })),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
         }, 3000);
       },
       onClose: () => {
@@ -387,7 +440,7 @@ const Userpage = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sub_section}>
+          <TouchableOpacity style={styles.sub_section} onPress={clearHandler}>
             <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}

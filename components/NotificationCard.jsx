@@ -66,7 +66,7 @@ export default NotificationCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.opacity.light[50],
+    backgroundColor: colors.light,
     padding: 20,
     display: "flex",
     justifyContent: "center",
