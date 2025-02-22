@@ -11,16 +11,36 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "@/assets/colors/colors";
 import ProfileHeader from "@/components/ProfileHeader";
 import { useRouter } from "expo-router";
+import useAuth from "@/hooks/useAuth";
+
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  image_url: string;
+}
 
 const Profile = () => {
   const [fullName, setFullName] = useState<string>();
   const [username, setUsername] = useState<string>();
   const router = useRouter();
+  const { GetLoggedInUser } = useAuth();
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
+  }, []);
+
+  console.log(user?.id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,7 +50,12 @@ const Profile = () => {
           style={{ flex: 1 }}
         >
           <ScrollView contentContainerStyle={styles.scrollView}>
-            <ProfileHeader />
+            <ProfileHeader
+              fullname={user?.fullname}
+              email={user?.email}
+              image_url={user?.image_url}
+              user_id={user?.id}
+            />
             <View style={styles.hero}>
               <View style={styles.field}>
                 <Text style={styles.label}>Full name</Text>

@@ -23,7 +23,7 @@ interface User {
   id: string;
   fullname: string;
   email: string;
-  username: string;
+  image_url: string;
 }
 
 interface Notification {
@@ -156,7 +156,11 @@ const Userpage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <UserHeader />
+      <UserHeader
+        fullname={user?.fullname}
+        email={user?.email}
+        image_url={user?.image_url}
+      />
       <ScrollView style={styles.hero}>
         <View style={styles.section}>
           <Text style={styles.section_header}>Account Information</Text>

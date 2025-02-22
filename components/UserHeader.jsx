@@ -3,29 +3,30 @@ import React, { useState, useEffect } from "react";
 import colors from "../assets/colors/colors";
 import { StatusBar } from "expo-status-bar";
 import HeaderBtns from "./HeaderBtns";
-import useAuth from "@/hooks/useAuth";
 
-const Header = () => {
-  const { GetLoggedInUser, isloading } = useAuth();
-  const [user, setUser] = useState();
+const Header = ({ fullname, email, image_url }) => {
+  const [profileImage, setProfileImage] = useState(
+    image_url
+      ? { uri: image_url }
+      : require("../assets/images/users/no-profile.png")
+  );
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
-    };
-    fetchUser();
-  }, []);
+    // Update the profile image if image_url changes
+    if (image_url) {
+      setProfileImage({ uri: image_url });
+    } else {
+      setProfileImage(require("../assets/images/users/no-profile.png"));
+    }
+  }, [image_url]); // Depend on image_url changes
+
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image
-          style={styles.pfp}
-          source={require("@/assets/images/users/user1.png")}
-        />
+        <Image style={styles.pfp} source={profileImage} />
         <View style={styles.bio}>
-          <Text style={styles.name}>Malik Yakub</Text>
-          <Text style={styles.job}>Frontend Developer</Text>
+          <Text style={styles.name}>{fullname}</Text>
+          <Text style={styles.job}>{email}</Text>
         </View>
       </View>
       <HeaderBtns />

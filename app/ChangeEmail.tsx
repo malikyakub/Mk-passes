@@ -21,7 +21,7 @@ interface User {
   id: string;
   fullname: string;
   email: string;
-  username: string;
+  image_url: string;
 }
 
 const ChangeEmail = () => {
@@ -40,7 +40,13 @@ const ChangeEmail = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProfileHeader />
+      <ProfileHeader
+        fullname={user?.fullname}
+        email={user?.email}
+        image_url={user?.image_url}
+        user_id={user?.id}
+
+      />
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
