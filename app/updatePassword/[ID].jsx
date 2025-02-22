@@ -6,6 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput,
+  Clipboard,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import usePasswords from "@/hooks/usePasswords";
@@ -15,16 +17,23 @@ import BottomNav from "@/components/BottomNav";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ConfirmCard from "@/components/ConfirmCard";
 import NotificationCard from "@/components/NotificationCard";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const imageMap = {
   youtube: require("@/assets/api/images/youtube.png"),
   facebook: require("@/assets/api/images/facebook.png"),
 };
 
-const PasswordDetails = () => {
+const UpdatePassword = () => {
   const { ID } = useLocalSearchParams();
-  const [password, setPassword] = useState(null);
-  const { GetPassword, isloading, DeletePassword } = usePasswords();
+  const { GetPassword, isloading, DeletePassword, UpdatePassword } =
+    usePasswords();
+  const [password, setPassword] = useState();
+  const [showNPassword, setShowNPassword] = useState(false);
+  const [showCPassword, setShowCPassword] = useState(false);
+  const [copiedCpass, setCopiedCpass] = useState(false);
+  const [copiedNpass, setCopiedNpass] = useState(false);
+  const [newPassword, setNewPassword] = useState();
   const [notification, setNotification] = useState({
     message: "",
     type: "",
@@ -55,6 +64,18 @@ const PasswordDetails = () => {
 
     fetchPassword();
   }, [ID]);
+
+  const copyHandler = (type) => {
+    if (type === "current") {
+      Clipboard.setString(password.password);
+      setCopiedCpass(true);
+      setTimeout(() => setCopiedCpass(false), 3000);
+    } else if (type === "new") {
+      Clipboard.setString(newPassword);
+      setCopiedNpass(true);
+      setTimeout(() => setCopiedNpass(false), 3000);
+    }
+  };
 
   const deleteHandler = () => {
     setConfirmDialog({
@@ -98,6 +119,37 @@ const PasswordDetails = () => {
     });
   };
 
+  const updateHandler = async () => {
+    const { err } = await UpdatePassword(ID, { password: newPassword });
+    if (err) {
+      console.log(err);
+      setNotification({
+        title: "Error",
+        message: err,
+        type: "error",
+        is_open: true,
+        action: () => router.push("/Passwords"),
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+        router.push("/Passwords");
+      }, 3000);
+      return;
+    }
+    setNotification({
+      title: "Updated successfully",
+      message: "the password " + password.password + " updated succesifully",
+      type: "success",
+      is_open: true,
+      action: () => router.push("/Passwords"),
+    });
+    setTimeout(() => {
+      setNotification((prev) => ({ ...prev, is_open: false }));
+      router.push("/Passwords");
+    }, 3000);
+    return;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
@@ -132,51 +184,66 @@ const PasswordDetails = () => {
                 {new Date(password.created_at).toLocaleDateString("en-CA")}
               </Text>
             </View>
-            <View style={styles.card}>
-              <View style={styles.side}></View>
-              <Image
-                style={styles.icon}
-                source={require("@/assets/Icons/key.png")}
-              />
-              <Text style={styles.txt}>Change password</Text>
-              <TouchableOpacity
-                style={styles.next_btn}
-                onPress={() => router.push(`/updatePassword/${ID}`)}
-              >
-                <Image
-                  style={styles.next_img}
-                  source={require("@/assets/Icons/next.png")}
+            <View style={styles.field}>
+              <Text style={styles.label}>Current Password</Text>
+              <View style={styles.input}>
+                <TextInput
+                  style={styles.textinput}
+                  secureTextEntry={!showCPassword}
+                  placeholder="Current password"
+                  value={password.password}
+                  readOnly
                 />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.card}>
-              <View style={styles.side}></View>
-              <Image
-                style={styles.icon}
-                source={require("@/assets/Icons/history.png")}
-              />
-              <Text style={styles.txt}>Review changes</Text>
-              <TouchableOpacity style={styles.next_btn}>
-                <Image
-                  style={styles.next_img}
-                  source={require("@/assets/Icons/next.png")}
+                <Entypo
+                  name={showCPassword ? "eye" : "eye-with-line"}
+                  size={24}
+                  color={colors.dark}
+                  onPress={() => setShowCPassword(!showCPassword)}
                 />
-              </TouchableOpacity>
+                {copiedCpass ? (
+                  <Text style={styles.copy}>Copied</Text>
+                ) : (
+                  <Ionicons
+                    name="copy"
+                    size={24}
+                    color={colors.dark}
+                    onPress={() => copyHandler("current")}
+                  />
+                )}
+              </View>
             </View>
-            <View style={styles.dangerZone}>
-              <View style={styles.D_side}></View>
-              <Image
-                style={styles.icon}
-                source={require("@/assets/Icons/delete.png")}
-              />
-              <Text style={styles.txt}>Delete password</Text>
-              <TouchableOpacity style={styles.next_btn} onPress={deleteHandler}>
-                <Image
-                  style={styles.next_img}
-                  source={require("@/assets/Icons/D_next.png")}
+
+            <View style={styles.field}>
+              <Text style={styles.label}>New Password</Text>
+              <View style={styles.input}>
+                <TextInput
+                  style={styles.textinput}
+                  secureTextEntry={!showNPassword}
+                  placeholder="New password"
+                  value={newPassword}
+                  onChangeText={(text) => setNewPassword(text)}
                 />
-              </TouchableOpacity>
+                <Entypo
+                  name={showNPassword ? "eye" : "eye-with-line"}
+                  size={24}
+                  color={colors.dark}
+                  onPress={() => setShowNPassword(!showNPassword)}
+                />
+                {copiedNpass ? (
+                  <Text style={styles.copy}>Copied</Text>
+                ) : (
+                  <Ionicons
+                    name="copy"
+                    size={24}
+                    color={colors.dark}
+                    onPress={() => copyHandler("new")}
+                  />
+                )}
+              </View>
             </View>
+            <TouchableOpacity style={styles.saveBtn} onPress={updateHandler}>
+              <Text style={styles.saveBtnText}>Save</Text>
+            </TouchableOpacity>
           </>
         ) : (
           <Text style={styles.txt}>No password found for this ID.</Text>
@@ -209,7 +276,7 @@ const PasswordDetails = () => {
   );
 };
 
-export default PasswordDetails;
+export default UpdatePassword;
 
 const styles = StyleSheet.create({
   container: {
@@ -269,21 +336,30 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
   },
-  dangerZone: {
-    backgroundColor: "#ff00004D",
-    marginTop: 20,
-    paddingLeft: 60,
+  field: {
+    marginBottom: 10,
+  },
+  label: {
+    fontFamily: "jaldi",
+    fontSize: 20,
+    color: colors.dark,
+  },
+  input: {
     display: "flex",
+    justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    height: 80,
+    backgroundColor: colors.opacity.dark[20],
+    borderRadius: 5,
+    padding: 5,
+    gap: 10,
   },
-  D_side: {
-    backgroundColor: "red",
-    width: 10,
-    height: "100%",
-    position: "absolute",
-    left: 0,
+  textinput: {
+    color: colors.dark,
+    paddingLeft: 8,
+    fontSize: 20,
+    fontFamily: "Jaldi",
+    flex: 1,
   },
   icon: {
     width: 40,
@@ -307,5 +383,25 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     resizeMode: "contain",
+  },
+  copy: {
+    fontSize: 20,
+    color: colors.cyan[300],
+    fontFamily: "Jaldi",
+    marginRight: 10,
+  },
+  saveBtn: {
+    paddingVertical: 15,
+    width: 150,
+    borderRadius: 30,
+    alignItems: "center",
+    backgroundColor: colors.cyan[300],
+    marginTop: 50,
+    alignSelf: "center",
+  },
+  saveBtnText: {
+    color: "#fff",
+    fontSize: 30,
+    fontFamily: "Jaini",
   },
 });
