@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "@/assets/colors/colors";
@@ -6,38 +6,75 @@ import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import PasswordCard from "@/components/PasswordCard";
 import passwordJson from "@/assets/api/passwords.json";
+import usePasswords from "@/hooks/usePasswords";
+import useAuth from "@/hooks/useAuth";
+import { isLoading } from "expo-font";
 
 type Password = {
-  ID: number;
-  "account-name": string;
+  id: string;
+  account_name: string;
   username: string;
   email: string;
   password: string;
   icon: string;
 };
 
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  username: string;
+}
+
 const Passwords = () => {
   const [passwords, setPasswords] = useState<Password[]>([]);
+  const { GetPasswords, isloading } = usePasswords();
+  const { GetLoggedInUser } = useAuth();
+
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    setPasswords(passwordJson as Password[]);
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const fetchPasswords = async () => {
+      const { data, err } = await GetPasswords(user.id);
+      if (err) {
+        console.log(err);
+        return;
+      }
+      setPasswords(data);
+    };
+
+    fetchPasswords();
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        {passwords.map((password) => (
-          <PasswordCard
-            key={password.ID}
-            passId={password.ID}
-            accountName={password["account-name"]}
-            username={password.username}
-            email={password.email}
-            password={password.password}
-            icon={password.icon}
-          />
-        ))}
+        {isloading ? (
+          <ActivityIndicator size={30} color={colors.cyan[300]} />
+        ) : (
+          passwords.map((password) => (
+            <PasswordCard
+              key={password.id}
+              passId={password.id}
+              accountName={password.account_name}
+              username={password.username}
+              email={password.email}
+              password={password.password}
+              icon={password.icon}
+            />
+          ))
+        )}
       </View>
       <BottomNav current={"passwords"} />
     </SafeAreaView>

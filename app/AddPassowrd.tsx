@@ -6,38 +6,134 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import { useRouter } from "expo-router";
+import PasswordGenerator from "@/assets/models/PasswordGenerator";
+import uuid from "react-native-uuid";
+import useAuth from "@/hooks/useAuth";
+import usePasswords from "@/hooks/usePasswords";
+import NotificationCard from "@/components/NotificationCard";
+
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  username: string;
+}
+
+interface Notification {
+  message: string;
+  type: string;
+  title: string;
+  is_open: boolean;
+  image_url?: string;
+  action: () => void;
+}
 
 const AddPassword = () => {
   const [isActionCalled, setIsActionCalled] = useState(false);
   const [actionIsLFam, setActionIsLFam] = useState<boolean | null>(null);
+  const [notification, setNotification] = useState<Notification>({
+    message: "",
+    type: "",
+    title: "",
+    is_open: false,
+    image_url: "",
+    action: () => {},
+  });
   const router = useRouter();
 
-  // Input states
   const [accountName, setAccountName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-  const [digits, setDigits] = useState<number | null>(null); // Numeric value
+  const [digits, setDigits] = useState<number | null>(null);
   const [password, setPassword] = useState<string>("");
+  const [user, setUser] = useState<User>();
+
+  const { GetLoggedInUser } = useAuth();
+  const { CreateNewPassword, isloading } = usePasswords();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
+  }, []);
+
+  const { LFam } = PasswordGenerator({
+    accountName,
+    username: userName,
+    digits,
+  });
 
   const pressHandler = (opt: number) => {
     setActionIsLFam(opt === 1);
     setIsActionCalled(true);
   };
 
-  const handleAddPress = () => {
-    console.log({
-      accountName,
-      userName,
-      digits,
-      password,
-    });
-    router.push("/Passwords");
+  const handleAddPress = async () => {
+    if (password) {
+      const newPassword = {
+        user_id: user?.id,
+        account_name: accountName,
+        username: userName,
+        password: password,
+        icon: accountName.toLowerCase(),
+      };
+      const { err } = await CreateNewPassword(newPassword);
+      if (err) {
+        console.log(err);
+        setNotification({
+          title: "Error",
+          message: "An error occured please try again",
+          type: "error",
+          is_open: true,
+          action: () =>
+            setNotification((prev) => ({ ...prev, is_open: false })),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+        }, 3000);
+        return;
+      }
+
+      setNotification({
+        title: "Success",
+        message: "Password created successfully",
+        type: "success",
+        is_open: true,
+        action: () => router.push("/Passwords"),
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+        router.push("/Passwords");
+      }, 3000);
+    } else {
+      setNotification({
+        title: "Warning",
+        message: "All fields are required",
+        type: "warning",
+        is_open: true,
+        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+      }, 3000);
+      return;
+    }
   };
+
+  useEffect(() => {
+    if (actionIsLFam && accountName && userName) {
+      const generatedPassword = LFam();
+      setPassword(generatedPassword);
+      setDigits(generatedPassword.length);
+    }
+  }, [accountName, userName, actionIsLFam]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,6 +171,7 @@ const AddPassword = () => {
               <Text style={styles.label}>Number of Digits</Text>
               <TextInput
                 style={styles.textinput}
+                editable={!actionIsLFam}
                 inputMode="numeric"
                 placeholder="12"
                 value={digits?.toString() || ""}
@@ -122,6 +219,19 @@ const AddPassword = () => {
         )}
       </View>
       <BottomNav current={"passwords"} />
+      {notification.is_open && (
+        <NotificationCard
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          is_open={notification.is_open}
+          image_url={notification.image_url}
+          action={notification.action}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, is_open: false }))
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -164,9 +274,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.dark,
   },
-  form: {
-    // Form container
-  },
+  form: {},
   label: {
     fontFamily: "jaldi",
     fontSize: 20,

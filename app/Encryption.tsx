@@ -1,40 +1,42 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import colors from "@/assets/colors/colors";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextOut from "@/components/TextOut";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useState } from "react";
+import useLFam from "@/hooks/useL-Fam";
+import { useState, useMemo } from "react";
+import HeroCard from "@/components/HeroCard";
 
 const Encryption = () => {
   const [text, setText] = useState("");
+  const { encryptText } = useLFam();
+
+  const encryptedText = useMemo(() => encryptText(text), [text]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.hero}>
-        <TextOut msg={text} placeholder={"Encrypted"} />
+      <ScrollView contentContainerStyle={styles.hero}>
+        <HeroCard
+          image_url={
+            "https://i.pinimg.com/474x/ce/fd/43/cefd4337d888fca5ea68f0ab1bb9adcc.jpg"
+          }
+          title={"Mk-Passes"}
+          body={"Encrypt with "}
+        />
         <View style={styles.textCont}>
           <TextInput
             inputMode="text"
-            placeholder="your message"
+            placeholder="Your message"
             placeholderTextColor={colors.light}
             style={styles.textInput}
             value={text}
-            onChangeText={(newText) => setText(newText)}
+            onChangeText={setText}
           />
-          <TouchableOpacity style={styles.btn} onPress={() => setText("")}>
-            <MaterialIcons name="clear" size={24} color={colors.cyan[300]} />
-            <Text style={styles.btnText}>clear</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+        <TextOut msg={encryptedText} placeholder={"Encrypted"} />
+      </ScrollView>
       <View>
         <BottomNav current={"encryption"} />
       </View>
@@ -52,13 +54,12 @@ const styles = StyleSheet.create({
   },
   hero: {
     flex: 1,
-    paddingHorizontal: 20,
-    justifyContent: "center",
+    padding: 20,
     zIndex: 1,
   },
   textCont: {
     backgroundColor: "#000",
-    marginTop: 20,
+    marginBlock: 20,
     padding: 10,
     borderWidth: 1,
     borderRadius: 5,
@@ -75,20 +76,5 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 5,
     fontFamily: "Jaldi",
-  },
-  btn: {
-    backgroundColor: colors.cyan[200],
-    flexDirection: "row",
-    gap: 5,
-    alignItems: "center",
-    padding: 5,
-    borderRadius: 5,
-    width: 80,
-  },
-  btnText: {
-    fontSize: 20,
-    fontFamily: "Jaldi",
-    fontWeight: "bold",
-    color: colors.dark,
   },
 });

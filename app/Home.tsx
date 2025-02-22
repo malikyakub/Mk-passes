@@ -7,52 +7,46 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import colors from "../assets/colors/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
-import HeroCards from "../components/HeroCards";
+import HeroCard from "../components/HeroCard";
 import { router } from "expo-router";
-import HomeCard from "@/components/HomeCard";
+import useAuth from "../hooks/useAuth";
+
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  username: string;
+}
 
 const Home = () => {
-  const card = [
-    {
-      cardimg: require("@/assets/images/passwords-ill.png"),
-      title: "Strong passwords",
-      body: "Generate and store strong, unique passwords for all your accounts.",
-      link: "AddPassowrd",
-      buttonText: "Passwords",
-    },
-    {
-      cardimg: require("@/assets/images/enc-dec-ill.png"),
-      title: "Encrypt message",
-      body: "Secure your communications by encrypting your messages. Ensure privacy and protect sensitive information.",
-      link: "Encryption",
-      buttonText: "Encrypt",
-    },
-    {
-      cardimg: require("@/assets/images/enc-dec-ill.png"),
-      title: "Decrypt message",
-      body: "Decrypt your encrypted messages to read the original content. Ensure secure communication.",
-      link: "Decryption",
-      buttonText: "Decrypt",
-    },
-    {
-      cardimg: require("@/assets/images/me-ill.png"),
-      title: "About Me",
-      body: "My name is Malik Yakub and I'm a software developer with a passion for creating innovative solutions and improving user experiences.",
-      link: "me",
-      buttonText: "About Me",
-    },
-  ];
+  const { GetLoggedInUser } = useAuth();
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.hero}>
-        <HomeCard title={"Mk-passes"} body={"With"} />
+        <HeroCard
+          title={user ? user.username : "Mk-passes"}
+          body={user ? "Welcom" : "With"}
+          image_url={
+            "https://i.pinimg.com/474x/f3/90/a6/f390a69c051dc2a1f7d8f322c96b0fa4.jpg"
+          }
+        />
 
         <ScrollView style={styles.cards} showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
