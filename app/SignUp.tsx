@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   Text,
@@ -160,6 +161,7 @@ const SignUp: React.FC = () => {
             <TextInput
               style={styles.textinput}
               placeholder="Email"
+              inputMode="email"
               value={form.email}
               onChangeText={(value) => handleChange("email", value)}
             />
@@ -227,9 +229,11 @@ const SignUp: React.FC = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.startBtn} onPress={handleSignUp}>
-        <Text style={styles.startText}>
-          {isloading ? "Creating..." : "Create account"}
-        </Text>
+        {isloading ? (
+          <ActivityIndicator size={30} color={colors.light} />
+        ) : (
+          <Text style={styles.startText}>Create account</Text>
+        )}
       </TouchableOpacity>
       <View style={styles.Login}>
         <Text style={styles.LoginText}>Already have an account?</Text>

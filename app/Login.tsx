@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   BackHandler,
   Image,
   StyleSheet,
@@ -29,7 +30,6 @@ const Login = () => {
     action: () => {},
   });
 
-  // Handle back button press
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -93,6 +93,7 @@ const Login = () => {
             <TextInput
               style={styles.textinput}
               placeholder="Email"
+              inputMode="email"
               value={email}
               onChangeText={(newtext) => setEmail(newtext)}
             />
@@ -136,9 +137,11 @@ const Login = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.startBtn} onPress={loginHandler}>
-        <Text style={styles.startText}>
-          {isloading ? "Logging in..." : "Login"}
-        </Text>
+        {isloading ? (
+          <ActivityIndicator size={30} color={colors.light} />
+        ) : (
+          <Text style={styles.startText}>Login</Text>
+        )}
       </TouchableOpacity>
       <View style={styles.SignUp}>
         <Text style={styles.SignUpText}>Don't have an account?</Text>
