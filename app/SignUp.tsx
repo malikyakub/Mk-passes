@@ -49,7 +49,7 @@ const SignUp: React.FC = () => {
     confirmPassword: "",
   });
 
-  const { CreateNewUser, isloading } = useAuth();
+  const { SignUp, isloading } = useAuth();
 
   const handleChange = (name: keyof typeof form, value: string) => {
     setForm({ ...form, [name]: value });
@@ -90,14 +90,12 @@ const SignUp: React.FC = () => {
     }
 
     const newUser = {
-      id: uuid.v4(),
       fullname: form.fullname,
       email: form.email,
       username: form.username,
-      password: form.password,
     };
 
-    const { err } = await CreateNewUser(newUser);
+    const { err } = await SignUp(form.email, form.password, newUser);
     if (err) {
       if (err.charCodeAt(0) === 100) {
         setNotification({
@@ -113,8 +111,8 @@ const SignUp: React.FC = () => {
         }, 3000);
       } else {
         setNotification({
-          title: "Error",
-          message: "An error occured",
+          title: "Account creation Failed",
+          message: err,
           type: "error",
           is_open: true,
           action: () =>
@@ -122,13 +120,14 @@ const SignUp: React.FC = () => {
         });
         setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
+          3000;
         });
       }
       return;
     }
 
     setNotification({
-      title: "Success",
+      title: "Account created",
       message: "Account created successfully",
       type: "success",
       is_open: true,

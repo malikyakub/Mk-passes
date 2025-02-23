@@ -9,6 +9,7 @@ import passwordJson from "@/assets/api/passwords.json";
 import usePasswords from "@/hooks/usePasswords";
 import useAuth from "@/hooks/useAuth";
 import { isLoading } from "expo-font";
+import { supabase } from "@/utils/supabase";
 
 type Password = {
   id: string;
@@ -36,7 +37,16 @@ const Passwords = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
+      const userInfo = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", loggedInUser?.id)
+        .single();
+      if (userInfo.data) {
+        setUser(userInfo.data);
+      } else {
+        console.error(userInfo.error);
+      }
     };
     fetchUser();
   }, []);

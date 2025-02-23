@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../assets/colors/colors";
 import Intro from "../components/Intro";
@@ -13,10 +13,14 @@ import useAuth from "../hooks/useAuth";
 
 const Index = () => {
   const router = useRouter();
-  const { GetLoggedInUser, isloading } = useAuth();
+  const { GetLoggedInUser } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const checkUser = async () => {
+    setLoading(true);
     const user = await GetLoggedInUser();
+    setLoading(false);
+
     if (user) {
       router.push("/Home");
     } else {
@@ -27,8 +31,12 @@ const Index = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Intro />
-      <TouchableOpacity style={styles.startBtn} onPress={checkUser}>
-        {isloading ? (
+      <TouchableOpacity
+        style={styles.startBtn}
+        onPress={checkUser}
+        disabled={loading}
+      >
+        {loading ? (
           <ActivityIndicator size={30} color={colors.light} />
         ) : (
           <Text style={styles.startText}>Start</Text>
@@ -46,20 +54,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cyan[100],
     justifyContent: "center",
     alignItems: "center",
-  },
-  text: {
-    fontSize: 80,
-    fontFamily: "Jaini",
-    textTransform: "uppercase",
-    color: colors.dark,
-    lineHeight: 70,
-  },
-  img: {
-    width: 200,
-    height: 200,
-    resizeMode: "contain",
-    alignSelf: "center",
-    marginBottom: 10,
   },
   startBtn: {
     paddingVertical: 15,

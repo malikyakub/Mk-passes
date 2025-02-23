@@ -17,6 +17,7 @@ import uuid from "react-native-uuid";
 import useAuth from "@/hooks/useAuth";
 import usePasswords from "@/hooks/usePasswords";
 import NotificationCard from "@/components/NotificationCard";
+import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -59,10 +60,19 @@ const AddPassword = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
+      const userInfo = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", loggedInUser?.id)
+        .single();
+      if (userInfo.data) {
+        setUser(userInfo.data);
+      } else {
+        console.error(userInfo.error);
+      }
     };
     fetchUser();
-  }, []);
+  }, [user]);
 
   const { LFam } = PasswordGenerator({
     accountName,

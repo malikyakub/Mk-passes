@@ -16,6 +16,7 @@ import BottomNav from "../components/BottomNav";
 import HeroCard from "../components/HeroCard";
 import { router } from "expo-router";
 import useAuth from "../hooks/useAuth";
+import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -31,10 +32,19 @@ const Home = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
+      const userInfo = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", loggedInUser?.id)
+        .single();
+      if (userInfo.data) {
+        setUser(userInfo.data);
+      } else {
+        console.log(userInfo.error?.message);
+      }
     };
     fetchUser();
-  }, []);
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.container}>

@@ -17,6 +17,7 @@ import colors from "@/assets/colors/colors";
 import ProfileHeader from "@/components/ProfileHeader";
 import { useRouter } from "expo-router";
 import useAuth from "@/hooks/useAuth";
+import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -35,10 +36,19 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
+      const userInfo = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", loggedInUser?.id)
+        .single();
+      if (userInfo.data) {
+        setUser(userInfo.data);
+      } else {
+        console.error(userInfo.error);
+      }
     };
     fetchUser();
-  }, []);
+  }, [user]);
 
   console.log(user?.id);
 
