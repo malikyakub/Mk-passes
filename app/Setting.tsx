@@ -19,6 +19,7 @@ import NotificationCard from "@/components/NotificationCard";
 import ConfirmCard from "@/components/ConfirmCard";
 import usePasswords from "@/hooks/usePasswords";
 import { supabase } from "@/utils/supabase";
+import deleteUserAccount from "@/assets/models/Deleteuser";
 
 interface User {
   id: string;
@@ -84,7 +85,7 @@ const Userpage = () => {
         if (data) {
           setUser(data);
         } else if (error) {
-          console.error("Error fetching user:", error);
+          console.log("Error fetching user:", error.message);
         }
       }
     };
@@ -163,6 +164,7 @@ const Userpage = () => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Login");
         }, 3000);
+        await deleteUserAccount(user.id);
       },
       onClose: () => {
         setConfirmDialog({ ...confirmDialog, is_open: false });
