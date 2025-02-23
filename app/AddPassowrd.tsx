@@ -46,7 +46,7 @@ const AddPassword = () => {
     action: () => {},
   });
   const router = useRouter();
-
+  const [passid, setPassId] = useState<string>(uuid.v4());
   const [accountName, setAccountName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [digits, setDigits] = useState<number | null>(null);
@@ -78,6 +78,7 @@ const AddPassword = () => {
   const handleAddPress = async () => {
     if (password) {
       const newPassword = {
+        id: passid,
         user_id: user?.id,
         account_name: accountName,
         username: userName,
@@ -86,7 +87,20 @@ const AddPassword = () => {
       };
       const { err } = await CreateNewPassword(newPassword);
       if (err) {
-        console.log(err);
+        if (err.charCodeAt(0) == 110) {
+          setNotification({
+            title: "Error",
+            message: "Your're not logged in",
+            type: "error",
+            is_open: true,
+            action: () => router.push("/Login"),
+          });
+          setTimeout(() => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            router.push("/Login");
+          }, 3000);
+          return;
+        }
         setNotification({
           title: "Error",
           message: "An error occured please try again",
@@ -106,11 +120,13 @@ const AddPassword = () => {
         message: "Password created successfully",
         type: "success",
         is_open: true,
-        action: () => router.push("/Passwords"),
+        action: () => {
+          router.push(`../password/${passid}`);
+        },
       });
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-        router.push("/Passwords");
+        router.push(`../password/${passid}`);
       }, 3000);
     } else {
       setNotification({

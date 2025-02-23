@@ -79,6 +79,20 @@ const usePasswords = () => {
       return { data: null, err: String(error) };
     }
   }
+
+  async function DeleteAllPasswords(userId: string): Promise<ReturnType> {
+    setisloading(true);
+    try {
+      const { error } = await supabase.from("passwords").delete().eq("user_id", userId);
+      setisloading(false);
+      if (error) return { data: null, err: error.message };
+      return { data: "All passwords deleted successfully", err: null };
+    } catch (error: unknown) {
+      setisloading(false);
+      return { data: null, err: String(error) };
+    }
+  }
+  
   
 
   return {
@@ -87,6 +101,7 @@ const usePasswords = () => {
     DeletePassword,
     GetPasswords,
     GetPassword,
+    DeleteAllPasswords,
     isloading,
   };
 };

@@ -1,20 +1,32 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import colors from "../assets/colors/colors";
 import { StatusBar } from "expo-status-bar";
 import HeaderBtns from "./HeaderBtns";
 
-const Header = () => {
+const Header = ({ fullname, email, image_url }) => {
+  const [profileImage, setProfileImage] = useState(
+    image_url
+      ? { uri: image_url }
+      : require("../assets/images/users/no-profile.png")
+  );
+
+  useEffect(() => {
+    // Update the profile image if image_url changes
+    if (image_url) {
+      setProfileImage({ uri: image_url });
+    } else {
+      setProfileImage(require("../assets/images/users/no-profile.png"));
+    }
+  }, [image_url]); // Depend on image_url changes
+
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image
-          style={styles.pfp}
-          source={require("@/assets/images/users/user1.png")}
-        />
+        <Image style={styles.pfp} source={profileImage} />
         <View style={styles.bio}>
-          <Text style={styles.name}>Malik Yakub</Text>
-          <Text style={styles.job}>Frontend Developer</Text>
+          <Text style={styles.name}>{fullname}</Text>
+          <Text style={styles.job}>{email}</Text>
         </View>
       </View>
       <HeaderBtns />

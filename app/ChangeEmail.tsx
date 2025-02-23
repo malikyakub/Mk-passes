@@ -9,20 +9,44 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import colors from "@/assets/colors/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileHeader from "@/components/ProfileHeader";
 import { router } from "expo-router";
 import OTPInput from "@/components/OTPInput";
+import useAuth from "@/hooks/useAuth";
+
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  image_url: string;
+}
 
 const ChangeEmail = () => {
   const [newEmail, setNewEmail] = useState<string>();
   const [codeIsSent, setCodeIsSent] = useState<Boolean>(false);
+  const { GetLoggedInUser } = useAuth();
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await GetLoggedInUser();
+      setUser(loggedInUser);
+    };
+    fetchUser();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProfileHeader />
+      <ProfileHeader
+        fullname={user?.fullname}
+        email={user?.email}
+        image_url={user?.image_url}
+        user_id={user?.id}
+
+      />
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

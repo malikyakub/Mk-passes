@@ -6,16 +6,28 @@ import {
   Image,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import colors from "@/assets/colors/colors";
 import { useRouter } from "expo-router";
+import useUsers from "@/hooks/useUsers";
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
   const router = useRouter();
+  const { UploadProfile } = useUsers();
   const [profileImage, setProfileImage] = useState(
-    require("@/assets/images/users/user1.png")
+    image_url != null
+      ? { uri: image_url }
+      : require("@/assets/images/users/no-profile.png")
   );
+
+  useEffect(() => {
+    if (image_url) {
+      setProfileImage({ uri: image_url });
+    } else {
+      setProfileImage(require("@/assets/images/users/no-profile.png"));
+    }
+  }, [image_url]);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -35,7 +47,16 @@ const ProfileHeader = () => {
     });
 
     if (!result.canceled) {
-      setProfileImage({ uri: result.assets[0].uri });
+      const selectedImageUri = result.assets[0].uri;
+      setProfileImage({ uri: selectedImageUri });
+
+      const { data, err } = await UploadProfile(user_id, selectedImageUri);
+      if (err) {
+        Alert.alert("Upload Failed", err);
+        console.log(err);
+      } else {
+        Alert.alert("Upload Successful", "Profile image updated!");
+      }
     }
   };
 
@@ -64,8 +85,8 @@ const ProfileHeader = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.name}>Malik Yakub</Text>
-      <Text style={styles.job}>Front-end Developer</Text>
+      <Text style={styles.name}>{fullname}</Text>
+      <Text style={styles.job}>{email}</Text>
     </View>
   );
 };

@@ -24,6 +24,7 @@ export default {
       20: "#2A333533",
     },
     light: {
+      60: "#ffffff99",
       50: "#ffffff80",
     },
   },

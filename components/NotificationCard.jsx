@@ -66,15 +66,13 @@ export default NotificationCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: 120,
     backgroundColor: colors.light,
+    padding: 20,
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    top: 20,
-    left: 0,
-    zIndex: 10,
+    top: 40,
   },
   hero: {
     flexDirection: "row",
@@ -82,6 +80,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 20,
+    gap: 10,
   },
   text_cont: {
     flex: 1,
@@ -89,12 +88,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   title: {
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: "Jaldi-bold",
   },
   message: {
-    fontSize: 20,
-    lineHeight: 25,
+    fontSize: 18,
+    lineHeight: 20,
     fontFamily: "Jaldi",
     color: colors.dark,
   },
