@@ -18,6 +18,7 @@ import useUsers from "@/hooks/useUsers";
 import NotificationCard from "@/components/NotificationCard";
 import ConfirmCard from "@/components/ConfirmCard";
 import usePasswords from "@/hooks/usePasswords";
+import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -50,7 +51,7 @@ const Userpage = () => {
   const [appThemeLight, setAppThemeLight] = useState(false);
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const router = useRouter();
-  const { GetLoggedInUser, isloading, Logout } = useAuth();
+  const { GetLoggedInUser, isloading, signOut } = useAuth();
   const { DeleteUser } = useUsers();
   const { DeleteAllPasswords } = usePasswords();
   const [user, setUser] = useState<User>();
@@ -73,8 +74,21 @@ const Userpage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
+      if (loggedInUser) {
+        const { data, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", loggedInUser.id)
+          .single();
+
+        if (data) {
+          setUser(data);
+        } else if (error) {
+          console.error("Error fetching user:", error);
+        }
+      }
     };
+
     fetchUser();
   }, []);
 
@@ -84,7 +98,7 @@ const Userpage = () => {
       title: "Logout",
       message: "Are you sure you want to logout from this account?",
       onAccept: async () => {
-        await Logout();
+        await signOut();
         setConfirmDialog({ ...confirmDialog, is_open: false });
         router.push("/Login");
       },
@@ -117,14 +131,15 @@ const Userpage = () => {
           console.log(passwordDeleteErr);
         }
 
-        const { err: userDeleteErr } = await DeleteUser(user.id);
+        const { err } = await DeleteUser(user.id);
+        console.log(err);
         setConfirmDialog({ ...confirmDialog, is_open: false });
 
-        if (userDeleteErr) {
-          console.log(userDeleteErr);
+        if (err) {
+          console.log(err);
           setNotification({
             title: "Delete account",
-            message: userDeleteErr,
+            message: err,
             type: "error",
             is_open: true,
             action: () =>
@@ -136,7 +151,7 @@ const Userpage = () => {
           return;
         }
 
-        await Logout();
+        await signOut();
         setNotification({
           title: "Success",
           message: "Account deleted successfully",

@@ -20,7 +20,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
-  const { Login, isloading } = useAuth();
+  const { LoginWithEmail, isloading } = useAuth();
   const [notification, setNotification] = useState({
     message: "",
     type: "",
@@ -47,7 +47,7 @@ const Login = () => {
 
   const loginHandler = async () => {
     if (email && password) {
-      const { err } = await Login(email, password);
+      const { err } = await LoginWithEmail(email, password);
       if (err) {
         setNotification({
           message: "Invalid username or password",

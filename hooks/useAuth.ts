@@ -1,78 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { User } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-interface ReturnType {
-  data?: any;
-  err: string | null;
-}
 
 const useAuth = () => {
   const [isloading, setisloading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  async function CreateNewUser(newUser: object): Promise<ReturnType> {
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => authListener.subscription.unsubscribe();
+  }, []);
+
+  const SignUp = async (email: string, password: string, extraData: object) => {
     setisloading(true);
-    try {
-      const { data, error } = await supabase.from("users").insert([newUser]).select();
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) {
       setisloading(false);
-      if (error) return { data: null, err: error.message };
-      if (data) {
-        await AsyncStorage.setItem("user", JSON.stringify(data[0]));
-      }
-      return { data, err: null };
-    } catch (error: unknown) {
-      setisloading(false);
-      return { data: null, err: String(error) };
+      return { data: null, err: error.message };
     }
-  }
 
-  async function Login(email: string, password: string): Promise<ReturnType> {
-    setisloading(true);
-    try {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("email", email)
-        .eq("password", password)
-        .single();
-      setisloading(false);
-      if (error) return { data: null, err: error.message };
-      if (data) {
-        await AsyncStorage.setItem("user", JSON.stringify(data));
+    const userId = data.user?.id;
+    if (userId) {
+      console.log('hello');
+      const { data, error } = await supabase.from("users").insert([{ id: userId, email, ...extraData }]);
+      if (error) {
+        console.log(error);
       }
-      return { data, err: null };
-    } catch (error: unknown) {
-      setisloading(false);
-      return { data: null, err: String(error) };
+      console.log(data);
     }
-  }
 
-  async function SaveUserIdToSession(userId: string) {
-    setisloading(true);
-    await AsyncStorage.setItem("userId", userId);
     setisloading(false);
-  }
+    return { data, err: null };
+  };
 
-  async function GetLoggedInUser() {
+  const LoginWithEmail = async (email: string, password: string) => {
     setisloading(true);
-    const user = await AsyncStorage.getItem("user");
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setisloading(false);
-    return user ? JSON.parse(user) : null;
-  }
+    return error ? { data: null, err: error.message } : { data, err: null };
+  };
 
-  async function Logout() {
+  const GetLoggedInUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    return error ? null : data.user;
+  };
+
+  const signOut = async () => {
     setisloading(true);
-    await AsyncStorage.removeItem("user");
-    await AsyncStorage.removeItem("userId");
+    await supabase.auth.signOut();
+    setUser(null);
     setisloading(false);
-  }
-
+  };
   return {
-    CreateNewUser,
-    Login,
-    SaveUserIdToSession,
+    SignUp,
+    LoginWithEmail,
     GetLoggedInUser,
-    Logout,
+    signOut,
+    user, // Real-time user state
     isloading,
   };
 };

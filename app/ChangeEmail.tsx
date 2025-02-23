@@ -16,6 +16,7 @@ import ProfileHeader from "@/components/ProfileHeader";
 import { router } from "expo-router";
 import OTPInput from "@/components/OTPInput";
 import useAuth from "@/hooks/useAuth";
+import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -33,10 +34,19 @@ const ChangeEmail = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const loggedInUser = await GetLoggedInUser();
-      setUser(loggedInUser);
+      const userInfo = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", loggedInUser?.id)
+        .single();
+      if (userInfo.data) {
+        setUser(userInfo.data);
+      } else {
+        console.error(userInfo.error);
+      }
     };
     fetchUser();
-  }, []);
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.container}>
