@@ -111,9 +111,11 @@ const AddPassword = () => {
             message: "Your're not logged in",
             type: "error",
             is_open: true,
-            action: () => router.push("/Login"),
+            action: () => {
+              router.push("/Login"), clearTimeout(timeout);
+            },
           });
-          setTimeout(() => {
+          const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
             router.push("/Login");
           }, 3000);
@@ -124,11 +126,14 @@ const AddPassword = () => {
           message: "An error occured please try again",
           type: "error",
           is_open: true,
-          action: () =>
-            setNotification((prev) => ({ ...prev, is_open: false })),
+          action: () => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            clearTimeout(timeout);
+          },
         });
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
+          router.push("/Login");
         }, 3000);
         return;
       }
@@ -140,21 +145,26 @@ const AddPassword = () => {
         is_open: true,
         action: () => {
           router.push(`../password/${passid}`);
+          clearTimeout(timeout);
         },
       });
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-        router.push(`../password/${passid}`);
+        router.push("/Login");
       }, 3000);
+      return;
     } else {
       setNotification({
         title: "Warning",
         message: "All fields are required",
         type: "warning",
         is_open: true,
-        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+        action: () => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          clearTimeout(timeout);
+        },
       });
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
       }, 3000);
       return;

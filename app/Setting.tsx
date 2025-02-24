@@ -120,8 +120,15 @@ const Userpage = () => {
         message: "User ID not found",
         type: "error",
         is_open: true,
-        action: () => router.push("/Login"),
+        action: () => {
+          router.push("/Login");
+          clearTimeout(timeout);
+        },
       });
+      const timeout = setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+        router.push("/Login");
+      }, 3000);
       return;
     }
 
@@ -129,46 +136,71 @@ const Userpage = () => {
       is_open: true,
       title: "Delete account",
       message:
-        "Are you sure you wanna delete your account along side all your data?",
+        "Are you sure you wanna delete your account along with all your data?",
       onAccept: async () => {
-        const { err: passwordDeleteErr } = await DeleteAllPasswords(user.id);
-        if (passwordDeleteErr) {
-          console.log(passwordDeleteErr);
-        }
+        try {
+          await deleteUserAccount(user.id);
 
-        const { err } = await DeleteUser(user.id);
-        console.log(err);
-        setConfirmDialog({ ...confirmDialog, is_open: false });
+          const { err: passwordDeleteErr } = await DeleteAllPasswords(user.id);
+          if (passwordDeleteErr) {
+            console.log(passwordDeleteErr);
+          }
 
-        if (err) {
-          console.log(err);
+          const { err } = await DeleteUser(user.id);
+          if (err) {
+            console.log(err);
+            setNotification({
+              title: "Delete account",
+              message: err,
+              type: "error",
+              is_open: true,
+              action: () => {
+                setNotification((prev) => ({ ...prev, is_open: false }));
+                clearTimeout(timeout);
+              },
+            });
+            const timeout = setTimeout(() => {
+              setNotification((prev) => ({ ...prev, is_open: false }));
+              router.push("/Login");
+            }, 3000);
+            return;
+          }
+
+          await signOut();
+          setNotification({
+            title: "Success",
+            message: "Account deleted successfully",
+            type: "success",
+            is_open: true,
+            action: () => {
+              router.push("/Login");
+              clearTimeout(timeout);
+            },
+          });
+
+          const timeout = setTimeout(() => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            router.push("/Login");
+          }, 3000);
+        } catch (error) {
+          console.error("Error deleting user account:", error);
           setNotification({
             title: "Delete account",
-            message: err,
+            message: "An error occurred while deleting your account",
             type: "error",
             is_open: true,
-            action: () =>
-              setNotification((prev) => ({ ...prev, is_open: false })),
+            action: () => {
+              setNotification((prev) => ({ ...prev, is_open: false }));
+              clearTimeout(timeout);
+            },
           });
-          setTimeout(() => {
+
+          const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
           }, 3000);
-          return;
+        } finally {
+          setConfirmDialog({ ...confirmDialog, is_open: false });
         }
-
-        await signOut();
-        setNotification({
-          title: "Success",
-          message: "Account deleted successfully",
-          type: "success",
-          is_open: true,
-          action: () => router.push("/Login"),
-        });
-        setTimeout(() => {
-          setNotification((prev) => ({ ...prev, is_open: false }));
-          router.push("/Login");
-        }, 3000);
-        await deleteUserAccount(user.id);
       },
       onClose: () => {
         setConfirmDialog({ ...confirmDialog, is_open: false });
@@ -183,8 +215,15 @@ const Userpage = () => {
         message: "User ID not found",
         type: "error",
         is_open: true,
-        action: () => router.push("/Login"),
+        action: () => {
+          router.push("/Login");
+          clearTimeout(timeout);
+        },
       });
+      const timeout = setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+        router.push("/Login");
+      }, 3000);
       return;
     }
 
@@ -202,11 +241,14 @@ const Userpage = () => {
             message: err,
             type: "error",
             is_open: true,
-            action: () =>
-              setNotification((prev) => ({ ...prev, is_open: false })),
+            action: () => {
+              setNotification((prev) => ({ ...prev, is_open: false }));
+              clearTimeout(timeout);
+            },
           });
-          setTimeout(() => {
+          const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
+            router.push("/Login");
           }, 3000);
           return;
         }
@@ -215,12 +257,15 @@ const Userpage = () => {
           message: data,
           type: "success",
           is_open: true,
-          action: () =>
-            setNotification((prev) => ({ ...prev, is_open: false })),
+          action: () => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            clearTimeout(timeout);
+          },
         });
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
         }, 3000);
+        return;
       },
       onClose: () => {
         setConfirmDialog({ ...confirmDialog, is_open: false });
