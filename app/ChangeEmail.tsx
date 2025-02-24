@@ -33,20 +33,28 @@ const ChangeEmail = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const loggedInUser = await GetLoggedInUser();
-      const userInfo = await supabase
+      const { data: authUser } = await supabase.auth.getUser();
+      if (!authUser || !authUser.user) {
+        console.error("No authenticated user found.");
+        return;
+      }
+
+      const { data: userData, error } = await supabase
         .from("users")
         .select("*")
-        .eq("id", loggedInUser?.id)
+        .eq("id", authUser.user.id)
         .single();
-      if (userInfo.data) {
-        setUser(userInfo.data);
-      } else {
-        console.error(userInfo.error);
+
+      if (error) {
+        console.error("Error fetching user:", error.message);
+        return;
       }
+
+      setUser(userData);
     };
+
     fetchUser();
-  }, [user]);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,7 +63,6 @@ const ChangeEmail = () => {
         email={user?.email}
         image_url={user?.image_url}
         user_id={user?.id}
-
       />
       <KeyboardAvoidingView
         style={styles.keyboardContainer}

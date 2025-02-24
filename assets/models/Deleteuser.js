@@ -1,7 +1,7 @@
 import axios from "axios";
 const deleteUserAccount = async (userId) => {
   try {
-    const response = await axios.post("http://192.168.100.3:5000/delete-user", {
+    const response = await axios.post("http://192.168.8.101:5000/delete-user", {
       userId: userId,
     });
 

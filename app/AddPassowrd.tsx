@@ -54,25 +54,33 @@ const AddPassword = () => {
   const [password, setPassword] = useState<string>("");
   const [user, setUser] = useState<User>();
 
-  const { GetLoggedInUser } = useAuth();
+  // const { GetLoggedInUser } = useAuth();
   const { CreateNewPassword, isloading } = usePasswords();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const loggedInUser = await GetLoggedInUser();
-      const userInfo = await supabase
+      const { data: authUser } = await supabase.auth.getUser();
+      if (!authUser || !authUser.user) {
+        console.error("No authenticated user found.");
+        return;
+      }
+
+      const { data: userData, error } = await supabase
         .from("users")
         .select("*")
-        .eq("id", loggedInUser?.id)
+        .eq("id", authUser.user.id)
         .single();
-      if (userInfo.data) {
-        setUser(userInfo.data);
-      } else {
-        console.error(userInfo.error);
+
+      if (error) {
+        console.error("Error fetching user:", error.message);
+        return;
       }
+
+      setUser(userData);
     };
+
     fetchUser();
-  }, [user]);
+  }, []);
 
   const { LFam } = PasswordGenerator({
     accountName,

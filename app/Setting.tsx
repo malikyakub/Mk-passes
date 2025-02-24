@@ -74,20 +74,24 @@ const Userpage = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const loggedInUser = await GetLoggedInUser();
-      if (loggedInUser) {
-        const { data, error } = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", loggedInUser.id)
-          .single();
-
-        if (data) {
-          setUser(data);
-        } else if (error) {
-          console.log("Error fetching user:", error.message);
-        }
+      const { data: authUser } = await supabase.auth.getUser();
+      if (!authUser || !authUser.user) {
+        console.error("No authenticated user found.");
+        return;
       }
+
+      const { data: userData, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", authUser.user.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching user:", error.message);
+        return;
+      }
+
+      setUser(userData);
     };
 
     fetchUser();
