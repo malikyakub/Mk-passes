@@ -27,7 +27,7 @@ const useUsers = () => {
   async function GetUserById(id: string): Promise<ReturnType> {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.from("users").select("*").eq("user_id", id).single();
+      const { data, error } = await supabase.from("users").select("*").eq("id", id).single();
       if (error) throw new Error(error.message);
 
       return { data, err: null };
@@ -41,7 +41,7 @@ const useUsers = () => {
   async function UpdateUser(id: string, newData: object): Promise<ReturnType> {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.from("users").update(newData).eq("user_id", id).select();
+      const { data, error } = await supabase.from("users").update(newData).eq("id", id).select();
       if (error) throw new Error(error.message);
 
       return { data, err: null };
@@ -65,39 +65,43 @@ const useUsers = () => {
       setIsLoading(false);
     }
   }
-
-  async function UploadProfile(userId: string, imageUri: string): Promise<ReturnType> {
+  async function UploadProfile(userId : string, imageFile : File) {
     setIsLoading(true);
     try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
-      const fileName = `${userId}_profile.png`;
-
-      // Upload to Supabase storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("users_profiles")
-        .upload(fileName, blob, {
+      const fileExt = imageFile.name.split(".").pop();
+      const fileName = `profile_${Date.now()}.${fileExt}`;
+      const filePath = `profiles/${userId}/${fileName}`;
+  
+      const { data, error } = await supabase.storage
+        .from("user_profiles")
+        .upload(filePath, imageFile, {
           cacheControl: "3600",
           upsert: true,
+          contentType: imageFile.type,
         });
-
-      if (uploadError) throw new Error(uploadError.message);
-
-      // Get the public URL of the uploaded image
-      const { data: urlData } = supabase.storage
-        .from("users_profiles")
-        .getPublicUrl(fileName);
-
-      if (!urlData) throw new Error("Failed to get public URL");
-
-      return { data: urlData.publicUrl, err: null };
-    } catch (error: unknown) {
+  
+      if (error) throw new Error(error.message);
+  
+      const { data: publicUrlData } = supabase.storage
+        .from("user_profiles")
+        .getPublicUrl(filePath);
+  
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ image_url: publicUrlData.publicUrl })
+        .eq("id", userId);
+  
+      if (updateError) throw new Error(updateError.message);
+  
+      return { data: publicUrlData.publicUrl, err: null };
+    } catch (error) {
       return { data: null, err: String(error) };
     } finally {
       setIsLoading(false);
     }
   }
-
+  
+  
   return {
     AllUsers,
     GetUserById,
