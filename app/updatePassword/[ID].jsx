@@ -90,10 +90,12 @@ const UpdatePassword = () => {
             message: "Error happened",
             type: "error",
             is_open: true,
-            action: () =>
-              setNotification((prev) => ({ ...prev, is_open: false })),
+            action: () => {
+              setNotification((prev) => ({ ...prev, is_open: false }));
+              clearTimeout(timeout);
+            },
           });
-          setTimeout(() => {
+          const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
           }, 3000);
           return;
@@ -105,9 +107,12 @@ const UpdatePassword = () => {
             "the password " + password.password + " deleted succesifully",
           type: "success",
           is_open: true,
-          action: () => setNotification(router.push("/Passwords")),
+          action: () => {
+            setNotification(router.push("/Passwords"));
+            clearTimeout(timeout);
+          },
         });
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Passwords");
         }, 3000);
@@ -128,9 +133,12 @@ const UpdatePassword = () => {
         message: err,
         type: "error",
         is_open: true,
-        action: () => router.push("/Passwords"),
+        action: () => {
+          setNotification(router.push("/Passwords"));
+          clearTimeout(timeout);
+        },
       });
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
         router.push("/Passwords");
       }, 3000);
@@ -141,9 +149,12 @@ const UpdatePassword = () => {
       message: "the password " + password.password + " updated succesifully",
       type: "success",
       is_open: true,
-      action: () => router.push("/Passwords"),
+      action: () => {
+        setNotification(router.push("/Passwords"));
+        clearTimeout(timeout);
+      },
     });
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setNotification((prev) => ({ ...prev, is_open: false }));
       router.push("/Passwords");
     }, 3000);

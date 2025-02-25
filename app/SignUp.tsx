@@ -67,9 +67,12 @@ const SignUp: React.FC = () => {
         message: "All fields are required",
         type: "warning",
         is_open: true,
-        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+        action: () => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          clearTimeout(timeout);
+        },
       });
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
       }, 3000);
       return;
@@ -81,9 +84,12 @@ const SignUp: React.FC = () => {
         message: "Passwords do not match",
         type: "error",
         is_open: true,
-        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+        action: () => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          clearTimeout(timeout);
+        },
       });
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
       }, 3000);
       return;
@@ -103,27 +109,31 @@ const SignUp: React.FC = () => {
           message: "User with this email already exists",
           type: "warning",
           is_open: true,
-          action: () =>
-            setNotification((prev) => ({ ...prev, is_open: false })),
+          action: () => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            clearTimeout(timeout);
+          },
         });
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
         }, 3000);
+        return;
       } else {
         setNotification({
           title: "Account creation Failed",
           message: err,
           type: "error",
           is_open: true,
-          action: () =>
-            setNotification((prev) => ({ ...prev, is_open: false })),
+          action: () => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            clearTimeout(timeout);
+          },
         });
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
-          3000;
-        });
+        }, 3000);
+        return;
       }
-      return;
     }
 
     setNotification({
@@ -131,9 +141,12 @@ const SignUp: React.FC = () => {
       message: "Account created successfully",
       type: "success",
       is_open: true,
-      action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+      action: () => {
+        router.push("/Profile");
+        clearTimeout(timeout);
+      },
     });
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setNotification((prev) => ({ ...prev, is_open: false }));
       router.push("/Home");
     }, 3000);
@@ -163,6 +176,7 @@ const SignUp: React.FC = () => {
               inputMode="email"
               value={form.email}
               onChangeText={(value) => handleChange("email", value)}
+              autoCapitalize="none"
             />
           </View>
         </View>

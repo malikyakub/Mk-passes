@@ -55,10 +55,14 @@ const Login = () => {
           title: "Error",
           is_open: true,
           image_url: "",
-          action: () => {},
+          action: () => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+            clearTimeout(timeout);
+          },
         });
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
+          router.push("/Login");
         }, 3000);
         return;
       }
@@ -70,11 +74,16 @@ const Login = () => {
         title: "Error",
         is_open: true,
         image_url: "",
-        action: () => {},
+        action: () => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          clearTimeout(timeout);
+        },
       });
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
+        router.push("/Login");
       }, 3000);
+      return;
     }
   };
 
@@ -96,6 +105,7 @@ const Login = () => {
               inputMode="email"
               value={email}
               onChangeText={(newtext) => setEmail(newtext)}
+              autoCapitalize="none"
             />
           </View>
         </View>
@@ -108,6 +118,7 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChangeText={(newtext) => setPassword(newtext)}
+              autoCapitalize="none"
             />
             <Entypo
               name={showPassword ? "eye" : "eye-with-line"}

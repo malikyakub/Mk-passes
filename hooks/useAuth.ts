@@ -43,7 +43,9 @@ const useAuth = () => {
   };
 
   const GetLoggedInUser = async () => {
+    setisloading(true);
     const { data, error } = await supabase.auth.getUser();
+    setisloading(false);
     return error ? null : data.user;
   };
 
@@ -53,12 +55,31 @@ const useAuth = () => {
     setUser(null);
     setisloading(false);
   };
+  const UpdateUserEmail = async (email : string) => {
+    setisloading(true);
+    const { data, error } = await supabase.auth.updateUser({
+      email: email,
+    })
+    return error ? error.message : 'Email Updated succesifully!'
+
+  }
+  
+  const UpdateUserPassword = async (password : string) => {
+    setisloading(true);
+    const { data, error } = await supabase.auth.updateUser({
+      password: password,
+    })
+    return error ? error.message : 'Password Updated succesifully!'
+
+  }
   return {
     SignUp,
     LoginWithEmail,
     GetLoggedInUser,
     signOut,
-    user, // Real-time user state
+    UpdateUserEmail,
+    UpdateUserPassword,
+    user,
     isloading,
   };
 };
