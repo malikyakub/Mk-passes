@@ -176,6 +176,7 @@ const SignUp: React.FC = () => {
               inputMode="email"
               value={form.email}
               onChangeText={(value) => handleChange("email", value)}
+              autoCapitalize="none"
             />
           </View>
         </View>

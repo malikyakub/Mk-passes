@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,20 +19,42 @@ import ProfileHeader from "@/components/ProfileHeader";
 import { useRouter } from "expo-router";
 import useAuth from "@/hooks/useAuth";
 import { supabase } from "@/utils/supabase";
+import useUsers from "@/hooks/useUsers";
+import NotificationCard from "@/components/NotificationCard";
 
 interface User {
   id: string;
   fullname: string;
+  username: string;
   email: string;
   image_url: string;
 }
 
+interface Notification {
+  message: string;
+  type: string;
+  title: string;
+  is_open: boolean;
+  image_url?: string;
+  action: () => void;
+}
+
 const Profile = () => {
   const [fullName, setFullName] = useState<string>();
+  const [email, setEmail] = useState<string>();
   const [username, setUsername] = useState<string>();
   const router = useRouter();
-  const { GetLoggedInUser } = useAuth();
+  const { GetLoggedInUser, UpdateUserEmail } = useAuth();
+  const { UpdateUser, isLoading } = useUsers();
   const [user, setUser] = useState<User>();
+  const [notification, setNotification] = useState<Notification>({
+    message: "",
+    type: "",
+    title: "",
+    is_open: false,
+    image_url: "",
+    action: () => {},
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -57,8 +80,70 @@ const Profile = () => {
 
     fetchUser();
   }, []);
+  const updateHandler = async () => {
+    if (fullName || username || email) {
+      if (user?.id) {
+        const updatedData: Partial<User> = {};
+        if (fullName) updatedData.fullname = fullName;
+        if (email) updatedData.email = email;
+        if (username) updatedData.username = username;
 
-  console.log(user?.id);
+        const { err } = await UpdateUser(user.id, updatedData);
+        if (err) {
+          setNotification({
+            title: "Error",
+            message: err,
+            type: "error",
+            is_open: true,
+            action: () =>
+              setNotification((prev) => ({ ...prev, is_open: false })),
+          });
+          setTimeout(() => {
+            setNotification((prev) => ({ ...prev, is_open: false }));
+          }, 3000);
+          return;
+        }
+
+        if (email) await UpdateUserEmail(email);
+
+        setUser((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            fullname: fullName ? fullName : prev.fullname,
+            email: email ? email : prev.email,
+            username: username ? username : prev.username,
+          };
+        });
+
+        setNotification({
+          title: "Update Successful",
+          message: "Your profile has been updated",
+          type: "success",
+          is_open: true,
+          action: () =>
+            setNotification((prev) => ({ ...prev, is_open: false })),
+        });
+        setTimeout(() => {
+          setNotification((prev) => ({ ...prev, is_open: false }));
+          router.push("/Setting");
+        }, 3000);
+      } else {
+        console.error("User ID is undefined");
+      }
+    } else {
+      setNotification({
+        title: "Warning",
+        message: "All fields are required",
+        type: "warning",
+        is_open: true,
+        action: () => setNotification((prev) => ({ ...prev, is_open: false })),
+      });
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, is_open: false }));
+      }, 3000);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,7 +152,10 @@ const Profile = () => {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
-          <ScrollView contentContainerStyle={styles.scrollView}>
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
+          >
             <ProfileHeader
               fullname={user?.fullname}
               email={user?.email}
@@ -80,9 +168,20 @@ const Profile = () => {
                 <TextInput
                   style={styles.textinput}
                   inputMode="text"
-                  placeholder="malik yakub"
+                  placeholder="Enter full name"
                   value={fullName}
-                  onChangeText={(newtext) => setFullName(newtext)}
+                  onChangeText={setFullName}
+                />
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.textinput}
+                  inputMode="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
                 />
               </View>
               <View style={styles.field}>
@@ -90,28 +189,37 @@ const Profile = () => {
                 <TextInput
                   style={styles.textinput}
                   inputMode="text"
-                  placeholder="mk-yare"
+                  placeholder="Enter username"
                   value={username}
-                  onChangeText={(newtext) => setUsername(newtext)}
+                  onChangeText={setUsername}
                   autoCapitalize="none"
                 />
               </View>
-              <TouchableOpacity
-                style={styles.saveBtn}
-                onPress={() => router.push("/Setting")}
-              >
+              <TouchableOpacity style={styles.saveBtn} onPress={updateHandler}>
                 <Text style={styles.saveBtnText}>Save</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
+      {notification.is_open && (
+        <NotificationCard
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          is_open={notification.is_open}
+          image_url={notification.image_url}
+          action={notification.action}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, is_open: false }))
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
 
 export default Profile;
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.cyan[100],

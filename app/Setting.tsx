@@ -298,7 +298,7 @@ const Userpage = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.sub_section}
             onPress={() => router.push("/ChangeEmail")}
           >
@@ -312,7 +312,7 @@ const Userpage = () => {
                 <Text style={styles.section_details}>m******b@hotmail.com</Text>
               </View>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => router.push("/PasswordChange")}
             style={styles.sub_section}

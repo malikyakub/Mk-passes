@@ -105,6 +105,7 @@ const Login = () => {
               inputMode="email"
               value={email}
               onChangeText={(newtext) => setEmail(newtext)}
+              autoCapitalize="none"
             />
           </View>
         </View>
@@ -117,6 +118,7 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChangeText={(newtext) => setPassword(newtext)}
+              autoCapitalize="none"
             />
             <Entypo
               name={showPassword ? "eye" : "eye-with-line"}
