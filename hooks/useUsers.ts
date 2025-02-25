@@ -51,13 +51,12 @@ const useUsers = () => {
       setIsLoading(false);
     }
   }
-
   async function DeleteUser(id: string): Promise<ReturnType> {
     setIsLoading(true);
     try {
       const { data, error } = await supabase.from("users").delete().eq("id", id).select();
       if (error) throw new Error(error.message);
-
+  
       return { data, err: null };
     } catch (error: unknown) {
       return { data: null, err: String(error) };
@@ -70,7 +69,7 @@ const useUsers = () => {
     try {
       const fileExt = imageFile.name.split(".").pop();
       const fileName = `profile_${Date.now()}.${fileExt}`;
-      const filePath = `profiles/${userId}/${fileName}`;
+      const filePath = `${userId}/${fileName}`;
   
       const { data, error } = await supabase.storage
         .from("user_profiles")
@@ -100,6 +99,36 @@ const useUsers = () => {
       setIsLoading(false);
     }
   }
+
+  async function ClearUserProfile(id: string): Promise<ReturnType> {
+    setIsLoading(true);
+    try {
+      const { data: files, error: listError } = await supabase.storage
+        .from("user_profiles")
+        .list(id);
+  
+      if (listError) throw new Error(listError.message);
+  
+      if (!files || files.length === 0) {
+        return { data: null, err: "No files found in the folder" };
+      }
+  
+      const filePaths = files.map((file) => `${id}/${file.name}`);
+  
+      const { data, error: deleteError } = await supabase.storage
+        .from("user_profiles")
+        .remove(filePaths);
+  
+      if (deleteError) throw new Error(deleteError.message);
+  
+      return { data, err: null };
+    } catch (error) {
+      return { data: null, err: String(error) };
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  
   
   
   return {
@@ -108,6 +137,7 @@ const useUsers = () => {
     UpdateUser,
     DeleteUser,
     UploadProfile,
+    ClearUserProfile,
     isLoading,
   };
 };

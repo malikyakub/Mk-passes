@@ -53,7 +53,7 @@ const Userpage = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const router = useRouter();
   const { GetLoggedInUser, isloading, signOut } = useAuth();
-  const { DeleteUser } = useUsers();
+  const { DeleteUser, ClearUserProfile } = useUsers();
   const { DeleteAllPasswords } = usePasswords();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
@@ -138,9 +138,9 @@ const Userpage = () => {
       message:
         "Are you sure you wanna delete your account along with all your data?",
       onAccept: async () => {
+        setConfirmDialog({ ...confirmDialog, is_open: false });
         try {
           await deleteUserAccount(user.id);
-
           const { err: passwordDeleteErr } = await DeleteAllPasswords(user.id);
           if (passwordDeleteErr) {
             console.log(passwordDeleteErr);
@@ -166,6 +166,7 @@ const Userpage = () => {
             return;
           }
 
+          await ClearUserProfile(user.id);
           await signOut();
           setNotification({
             title: "Success",
