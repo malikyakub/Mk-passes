@@ -5,11 +5,8 @@ import colors from "@/assets/colors/colors";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import PasswordCard from "@/components/PasswordCard";
-import passwordJson from "@/assets/api/passwords.json";
 import usePasswords from "@/hooks/usePasswords";
 import useAuth from "@/hooks/useAuth";
-import { isLoading } from "expo-font";
-import { supabase } from "@/utils/supabase";
 
 type Password = {
   id: string;
@@ -28,36 +25,18 @@ interface User {
 }
 
 const Passwords = () => {
-  const [passwords, setPasswords] = useState<Password[]>([]);
-  const { GetPasswords, isloading } = usePasswords();
   const { GetLoggedInUser } = useAuth();
-
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await GetLoggedInUser();
       setUser(userData);
-
-      //
     };
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (!user?.id) return;
-
-    const fetchPasswords = async () => {
-      const { data, err } = await GetPasswords(user.id);
-      if (err) {
-        console.log(err);
-        return;
-      }
-      setPasswords(data);
-    };
-
-    fetchPasswords();
-  }, [user]);
+  const { passwords, isloading } = usePasswords(user?.id);
 
   return (
     <SafeAreaView style={styles.container}>
