@@ -12,13 +12,12 @@ const Header = ({ fullname, email, image_url }) => {
   );
 
   useEffect(() => {
-    // Update the profile image if image_url changes
     if (image_url) {
       setProfileImage({ uri: image_url });
     } else {
       setProfileImage(require("../assets/images/users/no-profile.png"));
     }
-  }, [image_url]); // Depend on image_url changes
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -49,8 +48,9 @@ const styles = StyleSheet.create({
   profile: {
     justifyContent: "center",
     display: "flex",
-    alignItems: "flex-end",
+    alignItems: "center",
     flexDirection: "row",
+    overflow: "hidden",
   },
   pfp: {
     width: 50,

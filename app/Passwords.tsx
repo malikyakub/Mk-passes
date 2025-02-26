@@ -1,4 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "@/assets/colors/colors";
@@ -41,7 +47,7 @@ const Passwords = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.hero}>
+      <ScrollView contentContainerStyle={styles.hero}>
         {isloading ? (
           <ActivityIndicator size={30} color={colors.cyan[300]} />
         ) : (
@@ -57,7 +63,7 @@ const Passwords = () => {
             />
           ))
         )}
-      </View>
+      </ScrollView>
       <BottomNav current={"passwords"} />
     </SafeAreaView>
   );

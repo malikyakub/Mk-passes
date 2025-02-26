@@ -1,26 +1,21 @@
 import {
-  Image,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
+  ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "@/assets/colors/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileHeader from "@/components/ProfileHeader";
-import { useRouter } from "expo-router";
 import useAuth from "@/hooks/useAuth";
-import { supabase } from "@/utils/supabase";
 import useUsers from "@/hooks/useUsers";
 import NotificationCard from "@/components/NotificationCard";
+import { useRouter } from "expo-router";
 
 interface User {
   id: string;
@@ -45,7 +40,7 @@ const Profile = () => {
   const [username, setUsername] = useState<string>();
   const router = useRouter();
   const { GetLoggedInUser, UpdateUserEmail } = useAuth();
-  const { UpdateUser, isLoading } = useUsers();
+  const { UpdateUser } = useUsers();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
     message: "",
@@ -60,11 +55,10 @@ const Profile = () => {
     const fetchUser = async () => {
       const userData = await GetLoggedInUser();
       setUser(userData);
-
-      //
     };
     fetchUser();
   }, []);
+
   const updateHandler = async () => {
     if (fullName || username || email) {
       if (user?.id) {
@@ -130,62 +124,53 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
-        >
-          <ScrollView
-            contentContainerStyle={styles.scrollView}
-            keyboardShouldPersistTaps="handled"
-          >
-            <ProfileHeader
-              fullname={user?.fullname}
-              email={user?.email}
-              image_url={user?.image_url}
-              user_id={user?.id}
+      <ProfileHeader
+        fullname={user?.fullname}
+        email={user?.email}
+        image_url={user?.image_url}
+        user_id={user?.id}
+      />
+      <KeyboardAvoidingView
+        style={styles.keyboardContainer}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={80}
+      >
+        <ScrollView contentContainerStyle={styles.hero}>
+          <View style={styles.field}>
+            <Text style={styles.label}>Full name</Text>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Enter full name"
+              value={fullName}
+              onChangeText={setFullName}
             />
-            <View style={styles.hero}>
-              <View style={styles.field}>
-                <Text style={styles.label}>Full name</Text>
-                <TextInput
-                  style={styles.textinput}
-                  inputMode="text"
-                  placeholder="Enter full name"
-                  value={fullName}
-                  onChangeText={setFullName}
-                />
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.label}>Email</Text>
-                <TextInput
-                  style={styles.textinput}
-                  inputMode="email"
-                  placeholder="Enter email"
-                  value={email}
-                  onChangeText={setEmail}
-                  autoCapitalize="none"
-                  readOnly
-                />
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.label}>Username</Text>
-                <TextInput
-                  style={styles.textinput}
-                  inputMode="text"
-                  placeholder="Enter username"
-                  value={username}
-                  onChangeText={setUsername}
-                  autoCapitalize="none"
-                />
-              </View>
-              <TouchableOpacity style={styles.saveBtn} onPress={updateHandler}>
-                <Text style={styles.saveBtnText}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+          </View>
+          <View style={styles.field}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Enter email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              readOnly
+            />
+          </View>
+          <View style={styles.field}>
+            <Text style={styles.label}>Username</Text>
+            <TextInput
+              style={styles.textinput}
+              placeholder="Enter username"
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+            />
+          </View>
+          <TouchableOpacity style={styles.saveBtn} onPress={updateHandler}>
+            <Text style={styles.saveBtnText}>Save</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
       {notification.is_open && (
         <NotificationCard
           title={notification.title}
@@ -204,19 +189,17 @@ const Profile = () => {
 };
 
 export default Profile;
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.cyan[100],
     flex: 1,
-    position: "relative",
   },
-  scrollView: {
-    flexGrow: 1,
+  keyboardContainer: {
+    flex: 1,
   },
   hero: {
-    flex: 1,
     padding: 20,
-    zIndex: 1,
   },
   field: {
     marginBottom: 10,

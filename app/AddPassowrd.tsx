@@ -133,7 +133,7 @@ const AddPassword = () => {
       });
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-        router.push("/Login");
+        router.push("/Passwords");
       }, 3000);
       return;
     } else {
@@ -275,6 +275,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     zIndex: 1,
+    paddingBottom: 0,
   },
   back: {
     marginBottom: 20,

@@ -25,17 +25,23 @@ const Encryption = () => {
           title={"Mk-Passes"}
           body={"Encrypt with "}
         />
-        <View style={styles.textCont}>
-          <TextInput
-            inputMode="text"
-            placeholder="Your message"
-            placeholderTextColor={colors.light}
-            style={styles.textInput}
-            value={text}
-            onChangeText={setText}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.textCont}>
+            <TextInput
+              inputMode="text"
+              placeholder="Your message"
+              placeholderTextColor={colors.light}
+              style={styles.textInput}
+              value={text}
+              onChangeText={setText}
+            />
+          </View>
+          <TextOut
+            msg={encryptedText}
+            placeholder={"Encrypted"}
+            onclear={() => setText("")}
           />
-        </View>
-        <TextOut msg={encryptedText} placeholder={"Encrypted"} />
+        </ScrollView>
       </ScrollView>
       <View>
         <BottomNav current={"encryption"} />
@@ -56,6 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     zIndex: 1,
+    paddingBottom: 0,
   },
   textCont: {
     backgroundColor: "#000",

@@ -17,7 +17,7 @@ const Decryption = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <ScrollView contentContainerStyle={styles.hero}>
+      <View style={styles.hero}>
         <HeroCard
           image_url={
             "https://i.pinimg.com/474x/ce/fd/43/cefd4337d888fca5ea68f0ab1bb9adcc.jpg"
@@ -25,18 +25,24 @@ const Decryption = () => {
           title={"Mk-Passes"}
           body={"Decrypt it with"}
         />
-        <View style={styles.textCont}>
-          <TextInput
-            inputMode="text"
-            placeholder="Enter encrypted text"
-            placeholderTextColor={colors.light}
-            style={styles.textInput}
-            value={text}
-            onChangeText={setText}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.textCont}>
+            <TextInput
+              inputMode="text"
+              placeholder="Enter encrypted text"
+              placeholderTextColor={colors.light}
+              style={styles.textInput}
+              value={text}
+              onChangeText={setText}
+            />
+          </View>
+          <TextOut
+            msg={decryptedText}
+            placeholder={"Decrypted"}
+            onclear={() => setText("")}
           />
-        </View>
-        <TextOut msg={decryptedText} placeholder={"Decrypted"} />
-      </ScrollView>
+        </ScrollView>
+      </View>
       <View>
         <BottomNav current={"decryption"} />
       </View>
@@ -56,6 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     zIndex: 1,
+    paddingBottom: 0,
   },
   textCont: {
     backgroundColor: "#000",

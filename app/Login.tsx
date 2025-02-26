@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -88,7 +89,7 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Image
         source={require("../assets/images/logo.png")}
         style={styles.img}
@@ -173,7 +174,7 @@ const Login = () => {
           }
         />
       )}
-    </View>
+    </ScrollView>
   );
 };
 

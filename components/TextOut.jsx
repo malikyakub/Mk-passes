@@ -12,7 +12,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState, useEffect } from "react";
 import colors from "@/assets/colors/colors";
 
-const TextOut = ({ msg, placeholder }) => {
+const TextOut = ({ msg, placeholder, onclear }) => {
   const [text, setText] = useState(null);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const TextOut = ({ msg, placeholder }) => {
         readOnly
       />
       <View style={styles.btns}>
-        <TouchableOpacity style={styles.btn} onPress={() => setText("")}>
+        <TouchableOpacity style={styles.btn} onPress={onclear}>
           <MaterialIcons name="clear" size={24} color={colors.cyan[300]} />
           <Text style={styles.btnText}>clear</Text>
         </TouchableOpacity>
@@ -74,17 +74,19 @@ const styles = StyleSheet.create({
   btns: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: 170,
+    width: "100%",
     marginBlock: 10,
+    gap: 10,
   },
   btn: {
     backgroundColor: colors.cyan[200],
     flexDirection: "row",
     gap: 5,
     alignItems: "center",
+    justifyContent: "center",
     padding: 5,
     borderRadius: 5,
-    width: 80,
+    flex: 1,
   },
   btnText: {
     fontSize: 20,

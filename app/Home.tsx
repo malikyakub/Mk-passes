@@ -60,10 +60,9 @@ const Home = () => {
             <View style={styles.txt}>
               <Text style={styles.title}>Strong password</Text>
               <Text style={styles.body}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Explicabo quia architecto nobis expedita veniam, sapiente,
-                tempora incidunt nihil consectetur cumque laboriosam. Magni
-                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+                Generate strong, unique passwords instantly to enhance your
+                security. Our app creates complex combinations that protect your
+                accounts from hacking attempts.
               </Text>
               <TouchableOpacity
                 style={styles.btn}
@@ -81,10 +80,9 @@ const Home = () => {
             <View style={styles.txt}>
               <Text style={styles.title}>Encrypt messages</Text>
               <Text style={styles.body}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Explicabo quia architecto nobis expedita veniam, sapiente,
-                tempora incidunt nihil consectetur cumque laboriosam. Magni
-                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+                Protect your private messages with powerful encryption. Convert
+                your text into a secure, unreadable format that only the
+                intended recipient can decode.
               </Text>
               <TouchableOpacity
                 style={styles.btn}
@@ -102,10 +100,9 @@ const Home = () => {
             <View style={styles.txt}>
               <Text style={styles.title}>Decrypt messages</Text>
               <Text style={styles.body}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Explicabo quia architecto nobis expedita veniam, sapiente,
-                tempora incidunt nihil consectetur cumque laboriosam. Magni
-                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+                Effortlessly decrypt messages to reveal their original content.
+                Stay secure while ensuring seamless communication with trusted
+                contacts.
               </Text>
               <TouchableOpacity
                 style={styles.btn}
@@ -123,10 +120,9 @@ const Home = () => {
             <View style={styles.txt}>
               <Text style={styles.title}>About me</Text>
               <Text style={[styles.body, { color: colors.light }]}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Explicabo quia architecto nobis expedita veniam, sapiente,
-                tempora incidunt nihil consectetur cumque laboriosam. Magni
-                sequi enim facilis sunt dolore incidunt odio necessitatibus.
+                Hi, I'm Malik Yakub, a passionate software developer with a
+                knack for creating innovative solutions. Explore my portfolio to
+                see my latest projects and achievements 🤍.
               </Text>
               <TouchableOpacity
                 style={styles.btn}
@@ -137,12 +133,6 @@ const Home = () => {
             </View>
           </View>
         </ScrollView>
-        <AntDesign
-          onPress={() => Linking.openURL("https://mk-yakub.netlify.app")}
-          style={styles.heart}
-          name="heart"
-          color={colors.cyan[300]}
-        />
       </View>
       <View>
         <BottomNav current={"home"} />
@@ -164,6 +154,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     zIndex: 1,
+    paddingBottom: 0,
   },
   cards: {
     display: "flex",
@@ -211,9 +202,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Jaldi",
     color: colors.dark,
-    lineHeight: 20,
+    lineHeight: 24,
     marginBottom: 20,
-    flex: 1,
+    // flex: 1,
+    width: "80%",
     height: 120,
     overflow: "hidden",
   },

@@ -76,7 +76,6 @@ const Userpage = () => {
     const fetchUser = async () => {
       const userData = await GetLoggedInUser();
       setUser(userData);
-
     };
     fetchUser();
   }, []);

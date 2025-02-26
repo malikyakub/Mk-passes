@@ -33,7 +33,6 @@ const usePasswords = (userId?: string) => {
         "postgres_changes",
         { event: "*", schema: "public", table: "passwords", filter: `user_id=eq.${userId}` },
         (payload) => {
-          console.log("Realtime update:", payload);
           if (payload.eventType === "INSERT") {
             setPasswords((prev) => [payload.new, ...prev]);
           } else if (payload.eventType === "UPDATE") {
