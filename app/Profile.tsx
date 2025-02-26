@@ -89,8 +89,6 @@ const Profile = () => {
           return;
         }
 
-        if (email) await UpdateUserEmail(email);
-
         setUser((prev) => {
           if (!prev) return prev;
           return {
@@ -167,6 +165,7 @@ const Profile = () => {
                   value={email}
                   onChangeText={setEmail}
                   autoCapitalize="none"
+                  readOnly
                 />
               </View>
               <View style={styles.field}>

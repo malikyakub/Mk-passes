@@ -12,7 +12,7 @@ interface ReturnType {
 
 const useUsers = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const {saveUser} = useAuth()
+  const {saveUser, UpdateUserEmail, UpdateUserPassword} = useAuth()
 
   async function AllUsers(): Promise<ReturnType> {
     setIsLoading(true);
@@ -45,10 +45,12 @@ const useUsers = () => {
 
   async function UpdateUser(id: string, newData: object): Promise<ReturnType> {
     setIsLoading(true);
+    if(Object.keys(newData)[0] == 'email'){
+      await UpdateUserEmail(Object.values(newData)[0])
+    }
     try {
       const { data, error } = await supabase.from("users").update(newData).eq("id", id).select();
       if (error) throw new Error(error.message);
-
       return { data, err: null };
     } catch (error: unknown) {
       return { data: null, err: String(error) };
