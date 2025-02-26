@@ -13,13 +13,11 @@ import useAuth from "../hooks/useAuth";
 
 const Index = () => {
   const router = useRouter();
-  const { GetLoggedInUser } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const { GetLoggedInUser, isloading } = useAuth();
 
   const checkUser = async () => {
-    setLoading(true);
     const user = await GetLoggedInUser();
-    setLoading(false);
+
 
     if (user) {
       router.push("/Home");
@@ -34,9 +32,9 @@ const Index = () => {
       <TouchableOpacity
         style={styles.startBtn}
         onPress={checkUser}
-        disabled={loading}
+        disabled={isloading}
       >
-        {loading ? (
+        {isloading ? (
           <ActivityIndicator size={30} color={colors.light} />
         ) : (
           <Text style={styles.startText}>Start</Text>

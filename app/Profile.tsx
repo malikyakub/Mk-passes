@@ -58,26 +58,11 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: authUser } = await supabase.auth.getUser();
-      if (!authUser || !authUser.user) {
-        console.error("No authenticated user found.");
-        return;
-      }
-
-      const { data: userData, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authUser.user.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching user:", error.message);
-        return;
-      }
-
+      const userData = await GetLoggedInUser();
       setUser(userData);
-    };
 
+      //
+    };
     fetchUser();
   }, []);
   const updateHandler = async () => {
@@ -104,8 +89,6 @@ const Profile = () => {
           return;
         }
 
-        if (email) await UpdateUserEmail(email);
-
         setUser((prev) => {
           if (!prev) return prev;
           return {
@@ -129,7 +112,7 @@ const Profile = () => {
           router.push("/Setting");
         }, 3000);
       } else {
-        console.error("User ID is undefined");
+        router.push("/Login");
       }
     } else {
       setNotification({
@@ -182,6 +165,7 @@ const Profile = () => {
                   value={email}
                   onChangeText={setEmail}
                   autoCapitalize="none"
+                  readOnly
                 />
               </View>
               <View style={styles.field}>

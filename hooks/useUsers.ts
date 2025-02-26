@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { supabase } from "@/utils/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useAuth from "./useAuth";
+import deleteUserAccount from "@/assets/models/Deleteuser";
 
 
 interface ReturnType {
@@ -10,6 +12,7 @@ interface ReturnType {
 
 const useUsers = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const {saveUser, UpdateUserEmail, UpdateUserPassword} = useAuth()
 
   async function AllUsers(): Promise<ReturnType> {
     setIsLoading(true);
@@ -42,20 +45,26 @@ const useUsers = () => {
 
   async function UpdateUser(id: string, newData: object): Promise<ReturnType> {
     setIsLoading(true);
+    if(Object.keys(newData)[0] == 'email'){
+      await UpdateUserEmail(Object.values(newData)[0])
+    }
     try {
       const { data, error } = await supabase.from("users").update(newData).eq("id", id).select();
       if (error) throw new Error(error.message);
-
       return { data, err: null };
     } catch (error: unknown) {
       return { data: null, err: String(error) };
     } finally {
+      const { data, error } = await supabase.from('users').select('*').eq('id', id).single()
+    error ? console.log(error) : 'saved in the AsyncStorage'
+    await saveUser(data)
       setIsLoading(false);
     }
   }
 
   async function DeleteUser(id: string): Promise<ReturnType> {
     setIsLoading(true);
+    await deleteUserAccount(id);
     try {
       const { data, error } = await supabase.from("users").delete().eq("id", id).select();
       if (error) throw new Error(error.message);
@@ -64,6 +73,7 @@ const useUsers = () => {
     } catch (error: unknown) {
       return { data: null, err: String(error) };
     } finally {
+      await AsyncStorage.removeItem('UserData');
       setIsLoading(false);
     }
   }
@@ -100,6 +110,9 @@ const useUsers = () => {
     } catch (error) {
       return { data: null, err: String(error) };
     } finally {
+      const { data, error } = await supabase.from('users').select('*').eq('id', userId).single()
+    error ? console.log(error) : 'saved in the AsyncStorage'
+    await saveUser(data)
       setIsLoading(false);
     }
   }
@@ -133,19 +146,15 @@ const useUsers = () => {
     }
   }
 
-  // 🆕 Save Settings in Supabase Session
 
   async function SaveSettingsToSession(newSettings: object): Promise<{ data: object | null; err: string | null }> {
     setIsLoading(true);
     try {
-      // Get existing settings
       const storedSettings = await AsyncStorage.getItem("userSettings");
       const parsedSettings = storedSettings ? JSON.parse(storedSettings) : {};
   
-      // Merge new settings
       const updatedSettings = { ...parsedSettings, ...newSettings };
   
-      // Save to AsyncStorage
       await AsyncStorage.setItem("userSettings", JSON.stringify(updatedSettings));
   
       return { data: updatedSettings, err: null };

@@ -20,7 +20,6 @@ import NotificationCard from "@/components/NotificationCard";
 import ConfirmCard from "@/components/ConfirmCard";
 import usePasswords from "@/hooks/usePasswords";
 import { supabase } from "@/utils/supabase";
-import deleteUserAccount from "@/assets/models/Deleteuser";
 
 interface User {
   id: string;
@@ -75,26 +74,10 @@ const Userpage = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: authUser } = await supabase.auth.getUser();
-      if (!authUser || !authUser.user) {
-        console.error("No authenticated user found.");
-        return;
-      }
-
-      const { data: userData, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authUser.user.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching user:", error.message);
-        return;
-      }
-
+      const userData = await GetLoggedInUser();
       setUser(userData);
-    };
 
+    };
     fetchUser();
   }, []);
 
@@ -141,7 +124,6 @@ const Userpage = () => {
       onAccept: async () => {
         setConfirmDialog({ ...confirmDialog, is_open: false });
         try {
-          await deleteUserAccount(user.id);
           const { err: passwordDeleteErr } = await DeleteAllPasswords(user.id);
           if (passwordDeleteErr) {
             console.log(passwordDeleteErr);

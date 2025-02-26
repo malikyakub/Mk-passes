@@ -54,31 +54,14 @@ const AddPassword = () => {
   const [password, setPassword] = useState<string>("");
   const [user, setUser] = useState<User>();
 
-  // const { GetLoggedInUser } = useAuth();
+  const { GetLoggedInUser } = useAuth();
   const { CreateNewPassword, isloading } = usePasswords();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: authUser } = await supabase.auth.getUser();
-      if (!authUser || !authUser.user) {
-        console.error("No authenticated user found.");
-        return;
-      }
-
-      const { data: userData, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authUser.user.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching user:", error.message);
-        return;
-      }
-
+      const userData = await GetLoggedInUser();
       setUser(userData);
     };
-
     fetchUser();
   }, []);
 
