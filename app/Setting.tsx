@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Image,
   StyleSheet,
@@ -53,7 +54,7 @@ const Userpage = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const router = useRouter();
   const { GetLoggedInUser, isloading, signOut } = useAuth();
-  const { DeleteUser, ClearUserProfile } = useUsers();
+  const { DeleteUser, ClearUserProfile, SaveSettingsToSession } = useUsers();
   const { DeleteAllPasswords } = usePasswords();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
@@ -274,6 +275,51 @@ const Userpage = () => {
     });
   };
 
+  async function loadUserSettings() {
+    try {
+      const storedSettings = await AsyncStorage.getItem("userSettings");
+      if (storedSettings) {
+        const parsedSettings = JSON.parse(storedSettings);
+        setIsAppLockEnabled(parsedSettings.isAppLockEnabled || false);
+        setScreeCaptureAllowed(parsedSettings.screeCaptureAllowed || false);
+        setBiometricsEnabled(parsedSettings.biometricsEnabled || false);
+        setAppThemeLight(parsedSettings.appThemeLight || false);
+        setNotificationsAllowed(parsedSettings.notificationsAllowed || false);
+      }
+    } catch (error) {
+      console.error("Failed to load settings:", error);
+    }
+  }
+
+  useEffect(() => {
+    loadUserSettings();
+  }, []);
+
+  const handleToggle = async (settingKey: string, currentValue: boolean) => {
+    const newValue = !currentValue;
+    updateLocalState(settingKey, newValue);
+
+    try {
+      const { err } = await SaveSettingsToSession({ [settingKey]: newValue });
+
+      if (err) {
+        console.log("Error saving setting:", err);
+        updateLocalState(settingKey, currentValue);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      updateLocalState(settingKey, currentValue);
+    }
+  };
+
+  const updateLocalState = (key: string, value: boolean) => {
+    if (key === "isAppLockEnabled") setIsAppLockEnabled(value);
+    if (key === "screeCaptureAllowed") setScreeCaptureAllowed(value);
+    if (key === "biometricsEnabled") setBiometricsEnabled(value);
+    if (key === "appThemeLight") setAppThemeLight(value);
+    if (key === "notificationsAllowed") setNotificationsAllowed(value);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <UserHeader
@@ -310,7 +356,7 @@ const Userpage = () => {
               />
               <View style={styles.txt}>
                 <Text style={styles.section_text}>Change Email</Text>
-                <Text style={styles.section_details}>m******b@hotmail.com</Text>
+                <Text style={styles.section_details}>m**b@hotmail.com</Text>
               </View>
             </View>
           </TouchableOpacity> */}
@@ -325,7 +371,7 @@ const Userpage = () => {
               />
               <View style={styles.txt}>
                 <Text style={styles.section_text}>Change Password</Text>
-                <Text style={styles.section_details}>************</Text>
+                <Text style={styles.section_details}></Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -352,7 +398,9 @@ const Userpage = () => {
                 }}
                 thumbColor={isAppLockEnabled ? colors.cyan[300] : colors.dark}
                 ios_backgroundColor={colors.opacity.dark[50]}
-                onValueChange={() => setIsAppLockEnabled(!isAppLockEnabled)}
+                onValueChange={() =>
+                  handleToggle("isAppLockEnabled", isAppLockEnabled)
+                }
                 value={isAppLockEnabled}
                 style={{ position: "absolute", right: 0 }}
               />
@@ -380,7 +428,7 @@ const Userpage = () => {
                 }
                 ios_backgroundColor={colors.opacity.dark[50]}
                 onValueChange={() =>
-                  setScreeCaptureAllowed(!screeCaptureAllowed)
+                  handleToggle("screeCaptureAllowed", screeCaptureAllowed)
                 }
                 value={screeCaptureAllowed}
                 style={{ position: "absolute", right: 0 }}
@@ -406,7 +454,9 @@ const Userpage = () => {
                 }}
                 thumbColor={biometricsEnabled ? colors.cyan[300] : colors.dark}
                 ios_backgroundColor={colors.opacity.dark[50]}
-                onValueChange={() => setBiometricsEnabled(!biometricsEnabled)}
+                onValueChange={() =>
+                  handleToggle("biometricsEnabled", biometricsEnabled)
+                }
                 value={biometricsEnabled}
                 style={{ position: "absolute", right: 0 }}
               />
@@ -435,7 +485,9 @@ const Userpage = () => {
                 }}
                 thumbColor={appThemeLight ? colors.cyan[300] : colors.dark}
                 ios_backgroundColor={colors.opacity.dark[50]}
-                onValueChange={() => setAppThemeLight(!appThemeLight)}
+                onValueChange={() =>
+                  handleToggle("appThemeLight", appThemeLight)
+                }
                 value={appThemeLight}
                 style={{ position: "absolute", right: 0 }}
               />
@@ -461,7 +513,7 @@ const Userpage = () => {
                 }
                 ios_backgroundColor={colors.opacity.dark[50]}
                 onValueChange={() =>
-                  setNotificationsAllowed(!notificationsAllowed)
+                  handleToggle("notificationsAllowed", notificationsAllowed)
                 }
                 value={notificationsAllowed}
                 style={{ position: "absolute", right: 0 }}
