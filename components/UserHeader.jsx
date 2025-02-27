@@ -3,8 +3,11 @@ import React, { useState, useEffect } from "react";
 import colors from "../assets/colors/colors";
 import { StatusBar } from "expo-status-bar";
 import HeaderBtns from "./HeaderBtns";
+import useAuth from "@/hooks/useAuth";
 
 const Header = ({ fullname, email, image_url }) => {
+  const { GetLoggedInUser } = useAuth();
+  const [user, setUser] = useState();
   const [profileImage, setProfileImage] = useState(
     image_url
       ? { uri: image_url }
@@ -12,12 +15,20 @@ const Header = ({ fullname, email, image_url }) => {
   );
 
   useEffect(() => {
-    if (image_url) {
-      setProfileImage({ uri: image_url });
+    const fetchUser = async () => {
+      const userData = await GetLoggedInUser();
+      setUser(userData);
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (user && user.image_url) {
+      setProfileImage({ uri: user.image_url });
     } else {
       setProfileImage(require("../assets/images/users/no-profile.png"));
     }
-  }, []);
+  }, [user]);
 
   return (
     <View style={styles.container}>
