@@ -1,17 +1,22 @@
 import axios from "axios";
+
+// Define a type for the return value
 const deleteUserAccount = async (userId) => {
   try {
-    const response = await axios.post("http://192.168.8.101:5000/delete-user", {
+    const response = await axios.post("http://192.168.8.102:5000/delete-user", {
       userId: userId,
     });
 
     if (response.data.success) {
-      console.log("User deleted successfully");
+      return { data: response.data, error: null };
     } else {
-      console.error("Error deleting user:", response.data.error);
+      return {
+        data: null,
+        error: response.data.error || "Unknown error occurred",
+      };
     }
   } catch (error) {
-    console.error("Network error:", error);
+    return { data: null, error: error.message || "Network error" };
   }
 };
 

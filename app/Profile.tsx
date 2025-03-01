@@ -79,7 +79,7 @@ const Profile = () => {
           });
           setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
-          }, 3000);
+          }, 2000);
           return;
         }
 
@@ -104,7 +104,7 @@ const Profile = () => {
         setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Setting");
-        }, 3000);
+        }, 2000);
       } else {
         router.push("/Login");
       }
@@ -118,7 +118,7 @@ const Profile = () => {
       });
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
     }
   };
 

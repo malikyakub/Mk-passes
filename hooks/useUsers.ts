@@ -12,7 +12,7 @@ interface ReturnType {
 
 const useUsers = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const {saveUser, UpdateUserEmail, UpdateUserPassword} = useAuth()
+  const {saveUser, UpdateUserEmail, UpdateUserPassword, signOut} = useAuth()
 
   async function AllUsers(): Promise<ReturnType> {
     setIsLoading(true);
@@ -62,21 +62,36 @@ const useUsers = () => {
     }
   }
 
-  async function DeleteUser(id: string): Promise<ReturnType> {
+  async function DeleteUser(id: string): Promise<{ data: any; err: string | null }> {
     setIsLoading(true);
-    await deleteUserAccount(id);
+  
+    const { data, error } = await deleteUserAccount(id);
+  
+    if (error) {
+      setIsLoading(false);
+      return { data: null, err: error };
+    }
+  
     try {
-      const { data, error } = await supabase.from("users").delete().eq("id", id).select();
-      if (error) throw new Error(error.message);
-
-      return { data, err: null };
+      const { data: supabaseData, error: supabaseError } = await supabase
+        .from("users")
+        .delete()
+        .eq("id", id)
+        .select();
+  
+      if (supabaseError) throw new Error(supabaseError.message);
+  
+      return { data: supabaseData, err: null };
     } catch (error: unknown) {
       return { data: null, err: String(error) };
     } finally {
       await AsyncStorage.removeItem('UserData');
+      await ClearUserProfile(id);
+      await signOut();
       setIsLoading(false);
     }
   }
+  
 
   async function UploadProfile(userId: string, imageFile: File) {
     setIsLoading(true);
@@ -117,27 +132,28 @@ const useUsers = () => {
     }
   }
 
-  async function ClearUserProfile(id: string): Promise<ReturnType> {
+  async function ClearUserProfile(id: string): Promise<{ data: any; err: string | null }> {
     setIsLoading(true);
+    
     try {
       const { data: files, error: listError } = await supabase.storage
         .from("user_profiles")
         .list(id);
-
+  
       if (listError) throw new Error(listError.message);
-
+  
       if (!files || files.length === 0) {
         return { data: null, err: "No files found in the folder" };
       }
-
+  
       const filePaths = files.map((file) => `${id}/${file.name}`);
-
+  
       const { data, error: deleteError } = await supabase.storage
         .from("user_profiles")
         .remove(filePaths);
-
+  
       if (deleteError) throw new Error(deleteError.message);
-
+  
       return { data, err: null };
     } catch (error) {
       return { data: null, err: String(error) };
@@ -145,6 +161,7 @@ const useUsers = () => {
       setIsLoading(false);
     }
   }
+  
 
 
   async function SaveSettingsToSession(newSettings: object): Promise<{ data: object | null; err: string | null }> {

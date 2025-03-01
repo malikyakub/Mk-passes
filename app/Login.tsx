@@ -64,7 +64,7 @@ const Login = () => {
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Login");
-        }, 3000);
+        }, 2000);
         return;
       }
       router.push("/Home");
@@ -83,7 +83,7 @@ const Login = () => {
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
         router.push("/Login");
-      }, 3000);
+      }, 2000);
       return;
     }
   };

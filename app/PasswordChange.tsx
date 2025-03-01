@@ -13,9 +13,9 @@ import colors from "@/assets/colors/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileHeader from "@/components/ProfileHeader";
 import useAuth from "@/hooks/useAuth";
-import { supabase } from "@/utils/supabase";
 import NotificationCard from "@/components/NotificationCard";
 import { router } from "expo-router";
+import useUsers from "@/hooks/useUsers";
 
 interface User {
   id: string;
@@ -38,6 +38,7 @@ const PasswordChange = () => {
   const [email, setEmail] = useState<string>();
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>();
   const { GetLoggedInUser, UpdateUserPassword } = useAuth();
+  const { UpdateUser } = useUsers();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
     message: "",
@@ -52,8 +53,6 @@ const PasswordChange = () => {
     const fetchUser = async () => {
       const userData = await GetLoggedInUser();
       setUser(userData);
-
-      //
     };
     fetchUser();
   }, []);
@@ -69,7 +68,7 @@ const PasswordChange = () => {
       });
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -83,7 +82,7 @@ const PasswordChange = () => {
       });
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -97,15 +96,15 @@ const PasswordChange = () => {
       });
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
 
     try {
-      const result = await UpdateUserPassword(newPassword);
-
-      if (result) {
-        throw new Error(result);
+      await UpdateUserPassword(newPassword);
+      const { err } = await UpdateUser(user.id, { password: newPassword });
+      if (err) {
+        console.log(err);
       }
 
       setNotification({
@@ -118,7 +117,7 @@ const PasswordChange = () => {
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
         router.push("/Setting");
-      }, 3000);
+      }, 2000);
     } catch (err: any) {
       setNotification({
         title: "Error",
@@ -129,7 +128,7 @@ const PasswordChange = () => {
       });
       setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
     }
   };
 

@@ -76,7 +76,7 @@ const PasswordDetails = () => {
           });
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
-          }, 3000);
+          }, 2000);
           return;
         }
         setConfirmDialog({ ...confirmDialog, is_open: false });
@@ -94,7 +94,7 @@ const PasswordDetails = () => {
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Passwords");
-        }, 3000);
+        }, 2000);
         return;
       },
       onCancel: () => {

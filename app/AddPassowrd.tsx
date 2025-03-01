@@ -101,7 +101,7 @@ const AddPassword = () => {
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
             router.push("/Login");
-          }, 3000);
+          }, 2000);
           return;
         }
         setNotification({
@@ -117,7 +117,7 @@ const AddPassword = () => {
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
           router.push("/Login");
-        }, 3000);
+        }, 2000);
         return;
       }
 
@@ -134,7 +134,7 @@ const AddPassword = () => {
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
         router.push("/Passwords");
-      }, 3000);
+      }, 2000);
       return;
     } else {
       setNotification({
@@ -149,7 +149,7 @@ const AddPassword = () => {
       });
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
   };

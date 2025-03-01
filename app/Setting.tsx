@@ -19,7 +19,6 @@ import useUsers from "@/hooks/useUsers";
 import NotificationCard from "@/components/NotificationCard";
 import ConfirmCard from "@/components/ConfirmCard";
 import usePasswords from "@/hooks/usePasswords";
-import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -111,7 +110,7 @@ const Userpage = () => {
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
         router.push("/Login");
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -144,12 +143,10 @@ const Userpage = () => {
             const timeout = setTimeout(() => {
               setNotification((prev) => ({ ...prev, is_open: false }));
               router.push("/Login");
-            }, 3000);
+            }, 2000);
             return;
           }
 
-          await ClearUserProfile(user.id);
-          await signOut();
           setNotification({
             title: "Success",
             message: "Account deleted successfully",
@@ -164,7 +161,7 @@ const Userpage = () => {
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
             router.push("/Login");
-          }, 3000);
+          }, 2000);
         } catch (error) {
           console.error("Error deleting user account:", error);
           setNotification({
@@ -180,7 +177,7 @@ const Userpage = () => {
 
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
-          }, 3000);
+          }, 2000);
         } finally {
           setConfirmDialog({ ...confirmDialog, is_open: false });
         }
@@ -206,7 +203,7 @@ const Userpage = () => {
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
         router.push("/Login");
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -232,7 +229,7 @@ const Userpage = () => {
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
             router.push("/Login");
-          }, 3000);
+          }, 2000);
           return;
         }
         setNotification({
@@ -247,7 +244,7 @@ const Userpage = () => {
         });
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
-        }, 3000);
+        }, 2000);
         return;
       },
       onClose: () => {

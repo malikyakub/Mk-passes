@@ -74,7 +74,7 @@ const SignUp: React.FC = () => {
       });
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -91,7 +91,7 @@ const SignUp: React.FC = () => {
       });
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -99,6 +99,7 @@ const SignUp: React.FC = () => {
       fullname: form.fullname,
       email: form.email,
       username: form.username,
+      password: form.password,
     };
 
     const { err } = await SignUp(form.email, form.password, newUser);
@@ -116,7 +117,7 @@ const SignUp: React.FC = () => {
         });
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
-        }, 3000);
+        }, 2000);
         return;
       } else {
         setNotification({
@@ -131,7 +132,7 @@ const SignUp: React.FC = () => {
         });
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
-        }, 3000);
+        }, 2000);
         return;
       }
     }
@@ -149,7 +150,7 @@ const SignUp: React.FC = () => {
     const timeout = setTimeout(() => {
       setNotification((prev) => ({ ...prev, is_open: false }));
       router.push("/Home");
-    }, 3000);
+    }, 2000);
   };
 
   return (

@@ -57,7 +57,7 @@ const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
       });
       const timeout = setTimeout(() => {
         setNotification((prev) => ({ ...prev, is_open: false }));
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -102,7 +102,7 @@ const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
           });
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
-          }, 3000);
+          }, 2000);
           return;
         } else {
           setNotification({
@@ -117,7 +117,7 @@ const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
           });
           const timeout = setTimeout(() => {
             setNotification((prev) => ({ ...prev, is_open: false }));
-          }, 3000);
+          }, 2000);
           return;
         }
       } catch (error) {
@@ -133,7 +133,7 @@ const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
         });
         const timeout = setTimeout(() => {
           setNotification((prev) => ({ ...prev, is_open: false }));
-        }, 3000);
+        }, 2000);
         return;
       } finally {
         setUploading(false);

@@ -11,7 +11,7 @@ import Intro from "../components/Intro";
 import { useRouter } from "expo-router";
 import useAuth from "../hooks/useAuth";
 
-const Index = () => {
+const index = () => {
   const router = useRouter();
   const { GetLoggedInUser, isloading } = useAuth();
 
@@ -44,7 +44,7 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default index;
 
 const styles = StyleSheet.create({
   container: {
