@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import colors from "../assets/colors/colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { StatusBar } from "expo-status-bar";
 
 const NotificationCard = ({
   type = "default",
@@ -67,7 +68,7 @@ export default NotificationCard;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.light,
-    padding: 20,
+    paddingBlock: 20,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     gap: 10,
   },
   text_cont: {

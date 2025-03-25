@@ -17,7 +17,13 @@ import useUsers from "@/hooks/useUsers";
 import { BlurView } from "expo-blur";
 import NotificationCard from "./NotificationCard";
 
-const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
+const ProfileHeader = ({
+  fullname,
+  email,
+  image_url,
+  user_id,
+  onprofileView,
+}) => {
   const router = useRouter();
   const { UploadProfile } = useUsers();
   const [notification, setNotification] = useState({
@@ -154,13 +160,15 @@ const ProfileHeader = ({ fullname, email, image_url, user_id }) => {
       </TouchableOpacity>
 
       <View style={styles.pfpContainer}>
-        <ImageBackground source={profileImage} style={styles.pfp}>
-          {uploading && (
-            <BlurView intensity={80} style={styles.blur}>
-              <ActivityIndicator size="large" color={colors.cyan[300]} />
-            </BlurView>
-          )}
-        </ImageBackground>
+        <TouchableOpacity onPress={onprofileView}>
+          <ImageBackground source={profileImage} style={styles.pfp}>
+            {uploading && (
+              <BlurView intensity={80} style={styles.blur}>
+                <ActivityIndicator size="large" color={colors.cyan[300]} />
+              </BlurView>
+            )}
+          </ImageBackground>
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={pickImage}

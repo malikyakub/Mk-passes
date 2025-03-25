@@ -7,6 +7,7 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import colors from "@/assets/colors/colors";
@@ -16,7 +17,7 @@ import useAuth from "@/hooks/useAuth";
 import useUsers from "@/hooks/useUsers";
 import NotificationCard from "@/components/NotificationCard";
 import { useRouter } from "expo-router";
-
+import { StatusBar } from "expo-status-bar";
 interface User {
   id: string;
   fullname: string;
@@ -35,6 +36,7 @@ interface Notification {
 }
 
 const Profile = () => {
+  const [viewProfile, setViewProfile] = useState(false);
   const [fullName, setFullName] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [username, setUsername] = useState<string>();
@@ -129,6 +131,7 @@ const Profile = () => {
         email={user?.email}
         image_url={user?.image_url}
         user_id={user?.id}
+        onprofileView={() => setViewProfile(true)}
       />
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
@@ -184,6 +187,27 @@ const Profile = () => {
           }
         />
       )}
+
+      {viewProfile && (
+        <View style={styles.viewProfileBG}>
+          <View style={styles.viewProfileHeader}>
+            <View style={styles.viewProfileContent}>
+              <TouchableOpacity onPress={() => setViewProfile(false)}>
+                <Image
+                  style={styles.viewProfileBack}
+                  source={require("@/assets/Icons/back.png")}
+                />
+              </TouchableOpacity>
+              <Text style={styles.viewProfileText}>{user?.username}</Text>
+            </View>
+          </View>
+          <Image
+            source={{ uri: user?.image_url }}
+            style={styles.viewprofileImage}
+          />
+          <StatusBar hidden />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -213,6 +237,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.opacity.dark[20],
     color: colors.dark,
     paddingLeft: 8,
+    height: 50,
+    paddingInline: 5,
     fontSize: 20,
     fontFamily: "Jaldi",
     marginVertical: 5,
@@ -231,5 +257,51 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 30,
     fontFamily: "Jaini",
+  },
+  viewProfileBG: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    backgroundColor: colors.dark,
+    zIndex: 100,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  viewProfileHeader: {
+    backgroundColor: colors.opacity.cyan[20],
+    width: "100%",
+    height: 80,
+    position: "absolute",
+    top: 0,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+  },
+  viewProfileBack: {
+    width: 20,
+    height: 20,
+    resizeMode: "contain",
+  },
+  viewProfileContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
+  },
+  viewProfileText: {
+    fontSize: 30,
+    fontFamily: "Jaldi",
+    fontWeight: "bold",
+    letterSpacing: 2,
+    color: colors.cyan[300],
+    textTransform: "lowercase",
+    width: "auto",
+  },
+  viewprofileImage: {
+    width: "100%",
+    height: 400,
+    resizeMode: "cover",
+    overflow: "hidden",
   },
 });
