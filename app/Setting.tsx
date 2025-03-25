@@ -19,6 +19,7 @@ import useUsers from "@/hooks/useUsers";
 import NotificationCard from "@/components/NotificationCard";
 import ConfirmCard from "@/components/ConfirmCard";
 import usePasswords from "@/hooks/usePasswords";
+import { StatusBar } from "expo-status-bar";
 
 interface User {
   id: string;
@@ -598,11 +599,11 @@ const styles = StyleSheet.create({
   },
   hero: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     zIndex: 1,
   },
   section: {
-    marginBlock: 10,
+    marginBottom: 10,
   },
   sub_section: {
     marginBottom: 10,

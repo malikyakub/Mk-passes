@@ -168,13 +168,13 @@ const AddPassword = () => {
       <View style={styles.hero}>
         {isActionCalled ? (
           <View style={styles.form}>
+            <TouchableOpacity onPress={() => setIsActionCalled(false)}>
+              <Image
+                style={styles.back}
+                source={require("@/assets/Icons/back.png")}
+              />
+            </TouchableOpacity>
             <View>
-              <TouchableOpacity onPress={() => setIsActionCalled(false)}>
-                <Image
-                  style={styles.back}
-                  source={require("@/assets/Icons/back.png")}
-                />
-              </TouchableOpacity>
               <Text style={styles.label}>Account Name</Text>
               <TextInput
                 style={styles.textinput}
@@ -279,8 +279,8 @@ const styles = StyleSheet.create({
   },
   back: {
     marginBottom: 20,
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     resizeMode: "contain",
   },
   card: {
@@ -312,6 +312,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.opacity.dark[20],
     color: colors.dark,
     paddingLeft: 8,
+    height: 50,
+    paddingInline: 5,
     fontSize: 20,
     fontFamily: "Jaldi",
     marginVertical: 5,
