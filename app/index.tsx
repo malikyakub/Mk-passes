@@ -10,16 +10,27 @@ import colors from "../assets/colors/colors";
 import Intro from "../components/Intro";
 import { useRouter } from "expo-router";
 import useAuth from "../hooks/useAuth";
+import useUsers from "@/hooks/useUsers";
 
 const index = () => {
   const router = useRouter();
   const { GetLoggedInUser, isloading } = useAuth();
+  const { SendPushNotification } = useUsers();
 
   const checkUser = async () => {
     const user = await GetLoggedInUser();
 
-
     if (user) {
+      if (user?.id) {
+        const { err } = await SendPushNotification(
+          user?.id,
+          "Hello",
+          user?.fullname,
+        );
+        if (err) {
+          console.log(err, "maa");
+        }
+      }
       router.push("/Home");
     } else {
       router.push("/Login");

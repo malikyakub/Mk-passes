@@ -17,6 +17,8 @@ import HeroCard from "../components/HeroCard";
 import { router } from "expo-router";
 import useAuth from "../hooks/useAuth";
 import { supabase } from "@/utils/supabase";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+import useUsers from "@/hooks/useUsers";
 
 interface User {
   id: string;
@@ -27,17 +29,28 @@ interface User {
 
 const Home = () => {
   const { GetLoggedInUser } = useAuth();
+  const { SavePushToken } = useUsers();
   const [user, setUser] = useState<User>();
+  const { expoPushToken } = usePushNotifications();
 
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await GetLoggedInUser();
       setUser(userData);
-
-      //
     };
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    const saveUserPushToken = async () => {
+      if (user?.id && expoPushToken) {
+        await SavePushToken(user.id, expoPushToken);
+      }
+    };
+    if (user && expoPushToken) {
+      saveUserPushToken();
+    }
+  }, [expoPushToken, user]);
 
   return (
     <SafeAreaView style={styles.container}>

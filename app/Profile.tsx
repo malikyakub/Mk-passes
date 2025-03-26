@@ -42,7 +42,7 @@ const Profile = () => {
   const [username, setUsername] = useState<string>();
   const router = useRouter();
   const { GetLoggedInUser, UpdateUserEmail } = useAuth();
-  const { UpdateUser } = useUsers();
+  const { UpdateUser, SendPushNotification } = useUsers();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
     message: "",
