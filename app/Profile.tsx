@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileHeader from "@/components/ProfileHeader";
 import useAuth from "@/hooks/useAuth";

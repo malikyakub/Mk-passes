@@ -10,7 +10,7 @@ import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState, useEffect } from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 
 const TextOut = ({ msg, placeholder, onclear }) => {
   const [text, setText] = useState(null);
@@ -25,7 +25,7 @@ const TextOut = ({ msg, placeholder, onclear }) => {
         style={styles.textArea}
         multiline={true}
         numberOfLines={4}
-        placeholderTextColor={colors.light}
+        placeholderTextColor={colors.white}
         placeholder={`${placeholder} message appears here...`}
         value={text}
         onChangeText={(newText) => setText(newText)}
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     borderRadius: 5,
-    backgroundColor: "#000",
+    backgroundColor: colors.black,
     overflow: "hidden",
     borderRadius: 10,
     flexDirection: "column",
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   textArea: {
     backgroundColor: colors.dark,
     textAlignVertical: "top",
-    color: colors.light,
+    color: colors.white,
     fontSize: 20,
     height: 230,
     width: "100%",

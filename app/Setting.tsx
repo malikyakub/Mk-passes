@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import BottomNav from "@/components/BottomNav";
 import UserHeader from "@/components/UserHeader";
 import { useRouter } from "expo-router";

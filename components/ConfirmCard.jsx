@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
 
 const ConfirmCard = ({ title, message, is_open, onClose, onAccept }) => {
   if (!is_open) {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     width: "80%",
     display: "flex",
     padding: 20,
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
     borderRadius: 20,
     justifyContent: "center",
     alignContent: "center",

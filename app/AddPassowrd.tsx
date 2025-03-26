@@ -9,7 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import BottomNav from "@/components/BottomNav";
 import { useRouter } from "expo-router";
 import PasswordGenerator from "@/assets/models/PasswordGenerator";
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
   passwordTextinput: {
     backgroundColor: colors.dark,
-    color: colors.light,
+    color: colors.white,
     paddingLeft: 8,
     height: 60,
     fontSize: 20,

@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import OTPInput from "@/components/OTPInput";
 import { router } from "expo-router";
 

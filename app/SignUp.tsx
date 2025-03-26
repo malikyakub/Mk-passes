@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import { router } from "expo-router";
 import useAuth from "@/hooks/useAuth";
 import uuid from "react-native-uuid";
@@ -244,7 +244,7 @@ const SignUp: React.FC = () => {
       </View>
       <TouchableOpacity style={styles.startBtn} onPress={handleSignUp}>
         {isloading ? (
-          <ActivityIndicator size={30} color={colors.light} />
+          <ActivityIndicator size={30} color={colors.white} />
         ) : (
           <Text style={styles.startText}>Create account</Text>
         )}
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.dark,
   },
   google: {
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
     borderRadius: 10,
     display: "flex",
     flexDirection: "row",

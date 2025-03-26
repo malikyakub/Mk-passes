@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,7 +30,7 @@ const Decryption = () => {
             <TextInput
               inputMode="text"
               placeholder="Enter encrypted text"
-              placeholderTextColor={colors.light}
+              placeholderTextColor={colors.white}
               style={styles.textInput}
               value={text}
               onChangeText={setText}
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   textCont: {
-    backgroundColor: "#000",
+    backgroundColor: colors.black,
     marginBlock: 20,
     padding: 10,
     borderWidth: 1,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: colors.dark,
-    color: colors.light,
+    color: colors.white,
     fontSize: 20,
     height: "100%",
     flex: 1,

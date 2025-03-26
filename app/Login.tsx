@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import { router } from "expo-router";
 import useAuth from "@/hooks/useAuth";
 import NotificationCard from "@/components/NotificationCard";
@@ -150,7 +150,7 @@ const Login = () => {
       </View>
       <TouchableOpacity style={styles.startBtn} onPress={loginHandler}>
         {isloading ? (
-          <ActivityIndicator size={30} color={colors.light} />
+          <ActivityIndicator size={30} color={colors.white} />
         ) : (
           <Text style={styles.startText}>Login</Text>
         )}
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.dark,
   },
   google: {
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
     borderRadius: 10,
     display: "flex",
     flexDirection: "row",

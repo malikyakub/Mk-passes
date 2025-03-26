@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
 import { StatusBar } from "expo-status-bar";
 import HeaderBtns from "./HeaderBtns";
 

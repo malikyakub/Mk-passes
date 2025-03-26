@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
@@ -119,7 +119,7 @@ const Home = () => {
             />
             <View style={styles.txt}>
               <Text style={styles.title}>About me</Text>
-              <Text style={[styles.body, { color: colors.light }]}>
+              <Text style={[styles.body, { color: colors.white }]}>
                 Hi, I'm Malik Yakub, a passionate software developer with a
                 knack for creating innovative solutions. Explore my portfolio to
                 see my latest projects and achievements 🤍.
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   btnTxt: {
     fontSize: 18,
     fontFamily: "Jaldi-bold",
-    color: colors.light,
+    color: colors.white,
   },
   heart: {
     fontSize: 20,

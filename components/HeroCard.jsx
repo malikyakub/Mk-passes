@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 
 const HeroCard = ({ image_url, title, body }) => {
   return (
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   text_2: {
     fontSize: 20,
     fontFamily: "Jaldi",
-    color: colors.light,
+    color: colors.white,
     textAlign: "right",
   },
 });

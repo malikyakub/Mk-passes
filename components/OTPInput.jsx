@@ -1,4 +1,4 @@
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import React, { useRef, useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 

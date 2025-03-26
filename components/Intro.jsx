@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
+import D_colors from "../assets/colors/dark_colors";
 
 const Intro = () => {
+  
   return (
     <View style={styles.container}>
       <View style={styles.logo}>

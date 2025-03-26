@@ -1,6 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import React from "react";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
 import { useRouter } from "expo-router";
 
 const images = {

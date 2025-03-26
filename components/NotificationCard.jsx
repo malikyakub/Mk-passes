@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { StatusBar } from "expo-status-bar";
 
@@ -67,7 +67,7 @@ export default NotificationCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
     paddingBlock: 20,
     display: "flex",
     justifyContent: "center",

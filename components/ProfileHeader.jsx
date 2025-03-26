@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import { useRouter } from "expo-router";
 import useUsers from "@/hooks/useUsers";
 import { BlurView } from "expo-blur";
@@ -258,14 +258,14 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 45,
     fontFamily: "Jaini",
-    color: colors.light,
+    color: colors.white,
     letterSpacing: 3,
     textTransform: "capitalize",
   },
   job: {
     fontSize: 20,
     marginTop: -5,
-    color: colors.light,
+    color: colors.white,
     fontFamily: "Jaldi",
     letterSpacing: 2,
   },

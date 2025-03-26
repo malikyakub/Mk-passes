@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileHeader from "@/components/ProfileHeader";
 import useAuth from "@/hooks/useAuth";
@@ -201,25 +201,25 @@ const PasswordChange = () => {
         />
       )}
       {viewProfile && (
-              <View style={styles.viewProfileBG}>
-                <View style={styles.viewProfileHeader}>
-                  <View style={styles.viewProfileContent}>
-                    <TouchableOpacity onPress={() => setViewProfile(false)}>
-                      <Image
-                        style={styles.viewProfileBack}
-                        source={require("@/assets/Icons/back.png")}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.viewProfileText}>{user?.username}</Text>
-                  </View>
-                </View>
+        <View style={styles.viewProfileBG}>
+          <View style={styles.viewProfileHeader}>
+            <View style={styles.viewProfileContent}>
+              <TouchableOpacity onPress={() => setViewProfile(false)}>
                 <Image
-                  source={{ uri: user?.image_url }}
-                  style={styles.viewprofileImage}
+                  style={styles.viewProfileBack}
+                  source={require("@/assets/Icons/back.png")}
                 />
-                <StatusBar hidden />
-              </View>
-                    )}
+              </TouchableOpacity>
+              <Text style={styles.viewProfileText}>{user?.username}</Text>
+            </View>
+          </View>
+          <Image
+            source={{ uri: user?.image_url }}
+            style={styles.viewprofileImage}
+          />
+          <StatusBar hidden />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -271,49 +271,49 @@ const styles = StyleSheet.create({
     fontFamily: "Jaini",
   },
   viewProfileBG: {
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      backgroundColor: colors.dark,
-      zIndex: 100,
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    viewProfileHeader: {
-      backgroundColor: colors.opacity.cyan[20],
-      width: "100%",
-      height: 80,
-      position: "absolute",
-      top: 0,
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 20,
-    },
-    viewProfileBack: {
-      width: 20,
-      height: 20,
-      resizeMode: "contain",
-    },
-    viewProfileContent: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 20,
-    },
-    viewProfileText: {
-      fontSize: 30,
-      fontFamily: "Jaldi",
-      fontWeight: "bold",
-      letterSpacing: 2,
-      color: colors.cyan[300],
-      textTransform: "lowercase",
-      width: "auto",
-    },
-    viewprofileImage: {
-      width: "100%",
-      height: 400,
-      resizeMode: "cover",
-      overflow: "hidden",
-    },
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    backgroundColor: colors.dark,
+    zIndex: 100,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  viewProfileHeader: {
+    backgroundColor: colors.opacity.cyan[20],
+    width: "100%",
+    height: 80,
+    position: "absolute",
+    top: 0,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+  },
+  viewProfileBack: {
+    width: 20,
+    height: 20,
+    resizeMode: "contain",
+  },
+  viewProfileContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
+  },
+  viewProfileText: {
+    fontSize: 30,
+    fontFamily: "Jaldi",
+    fontWeight: "bold",
+    letterSpacing: 2,
+    color: colors.cyan[300],
+    textTransform: "lowercase",
+    width: "auto",
+  },
+  viewprofileImage: {
+    width: "100%",
+    height: 400,
+    resizeMode: "cover",
+    overflow: "hidden",
+  },
 });

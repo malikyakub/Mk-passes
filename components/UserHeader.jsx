@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
-import colors from "../assets/colors/colors";
+import colors from "../assets/colors/light_colors";
 import { StatusBar } from "expo-status-bar";
 import HeaderBtns from "./HeaderBtns";
 import useAuth from "@/hooks/useAuth";
@@ -76,14 +76,14 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 25,
     letterSpacing: 2,
-    color: colors.light,
+    color: colors.white,
     fontFamily: "Jaini",
   },
   job: {
     fontSize: 18,
     marginTop: -8,
     letterSpacing: 2,
-    color: colors.light,
+    color: colors.white,
     fontFamily: "Jaldi",
   },
 });

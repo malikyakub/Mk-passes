@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import usePasswords from "@/hooks/usePasswords";
-import colors from "@/assets/colors/colors";
+import colors from "@/assets/colors/light_colors";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { SafeAreaView } from "react-native-safe-area-context";

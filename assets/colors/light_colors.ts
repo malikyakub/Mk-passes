@@ -12,7 +12,8 @@ export default {
     300: "#0A97B0",
   },
   dark: "#2A3335",
-  light: "#ffffff",
+  white: "#ffffff",
+  black : '#000000',
   opacity: {
     cyan: {
       50: "#0A97B080",
