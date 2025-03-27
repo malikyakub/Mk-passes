@@ -9,14 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.malikyakub.Mkpasses"
+      "package": "com.malikyakub.Mkpasses",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -54,6 +58,9 @@
       "eas": {
         "projectId": "2a32fa31-5d87-4d1a-be43-3a5013160922"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2a32fa31-5d87-4d1a-be43-3a5013160922"
     }
   }
 }
