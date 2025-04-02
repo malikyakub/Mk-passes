@@ -21,16 +21,16 @@ const index = () => {
     const user = await GetLoggedInUser();
 
     if (user) {
-      if (user?.id) {
-        const { err } = await SendPushNotification(
-          user?.id,
-          "Hello",
-          user?.fullname,
-        );
-        if (err) {
-          console.log(err, "maa");
-        }
-      }
+      // if (user?.id) {
+      //   const { err } = await SendPushNotification(
+      //     user?.id,
+      //     "Hello",
+      //     user?.fullname,
+      //   );
+      //   if (err) {
+      //     console.log(err, "maa");
+      //   }
+      // }
       router.push("/Home");
     } else {
       router.push("/Login");
