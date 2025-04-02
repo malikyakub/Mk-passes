@@ -10,6 +10,7 @@ import colors from "../assets/colors/colors";
 import Intro from "../components/Intro";
 import { useRouter } from "expo-router";
 import useAuth from "../hooks/useAuth";
+import useUsers from "@/hooks/useUsers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as LocalAuthentication from "expo-local-authentication";
 
@@ -18,6 +19,7 @@ const index = () => {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { GetLoggedInUser, isloading } = useAuth();
+  const { SendPushNotification } = useUsers();
 
   useEffect(() => {
     loadUserSettings();
@@ -33,6 +35,16 @@ const index = () => {
     const user = await GetLoggedInUser();
 
     if (user) {
+      // if (user?.id) {
+      //   const { err } = await SendPushNotification(
+      //     user?.id,
+      //     "Hello",
+      //     user?.fullname,
+      //   );
+      //   if (err) {
+      //     console.log(err, "maa");
+      //   }
+      // }
       router.push("/Home");
     } else {
       router.push("/Login");
