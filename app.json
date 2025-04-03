@@ -4,7 +4,7 @@
     "slug": "Mk-passes",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icons/bg-removed-icon.png",
+    "icon": "./assets/images/app-icons/icon-4.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -16,8 +16,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/light-logo.png",
-        "backgroundColor": "#0A97B0"
+        "foregroundImage": "./assets/images/app-icons/bg-removed-icon.png",
+        "backgroundColor": "#ffffff"
       },
       "package": "com.malikyakub.Mkpasses",
       "runtimeVersion": "1.0.0"
@@ -32,10 +32,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/light-logo.png",
+          "image": "./assets/images/app-icons/bg-removed-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#0A97B0"
+          "backgroundColor": "#ffffff"
         }
       ]
     ],
