@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "runtimeVersion": {
-        "policy": "appVersion"
+        "policy": "1.0.0"
       },
       "bundleIdentifier": "com.malikyakub.Mkpasses.ios"
     },
