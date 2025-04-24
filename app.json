@@ -21,7 +21,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.malikyakub.Mkpasses",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.0",
+      "notification": {
+        "icon": "./assets/images/light-logo.png",
+        "color": "#B1F0F7"
+      }
     },
     "web": {
       "bundler": "metro",

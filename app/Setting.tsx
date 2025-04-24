@@ -48,12 +48,16 @@ interface ConfirmCard {
 const Userpage = () => {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(false);
   const [screeCaptureAllowed, setScreeCaptureAllowed] = useState(true);
-  const [biometricsEnabled, setBiometricsEnabled] = useState(false);
   const [appThemeLight, setAppThemeLight] = useState(false);
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const router = useRouter();
   const { GetLoggedInUser, isloading, signOut } = useAuth();
-  const { DeleteUser, ClearUserProfile, SaveSettingsToSession } = useUsers();
+  const {
+    DeleteUser,
+    ClearUserProfile,
+    SaveSettingsToSession,
+    SendPushNotification,
+  } = useUsers();
   const { DeleteAllPasswords } = usePasswords();
   const [user, setUser] = useState<User>();
   const [notification, setNotification] = useState<Notification>({
@@ -88,6 +92,16 @@ const Userpage = () => {
       onAccept: async () => {
         await signOut();
         setConfirmDialog({ ...confirmDialog, is_open: false });
+        if (user) {
+          const { err } = await SendPushNotification(
+            user?.id,
+            user?.fullname,
+            "You logged out"
+          );
+          if (err) {
+            console.log(err);
+          }
+        }
         router.push("/Login");
       },
       onClose: () => {
@@ -261,7 +275,6 @@ const Userpage = () => {
         const parsedSettings = JSON.parse(storedSettings);
         setIsAppLockEnabled(parsedSettings.isAppLockEnabled || false);
         setScreeCaptureAllowed(parsedSettings.screeCaptureAllowed || false);
-        setBiometricsEnabled(parsedSettings.biometricsEnabled || false);
         setAppThemeLight(parsedSettings.appThemeLight || false);
         setNotificationsAllowed(parsedSettings.notificationsAllowed || false);
       }
@@ -294,7 +307,6 @@ const Userpage = () => {
   const updateLocalState = (key: string, value: boolean) => {
     if (key === "isAppLockEnabled") setIsAppLockEnabled(value);
     if (key === "screeCaptureAllowed") setScreeCaptureAllowed(value);
-    if (key === "biometricsEnabled") setBiometricsEnabled(value);
     if (key === "appThemeLight") setAppThemeLight(value);
     if (key === "notificationsAllowed") setNotificationsAllowed(value);
   };
@@ -415,7 +427,7 @@ const Userpage = () => {
             </View>
           </View>
           <View style={styles.sub_section}>
-            <View style={styles.section_info}>
+            {/* <View style={styles.section_info}>
               <Image
                 style={styles.section_icon}
                 source={require("@/assets/Icons/fingerprint.png")}
@@ -431,15 +443,15 @@ const Userpage = () => {
                   false: colors.opacity.dark[50],
                   true: colors.opacity.cyan[50],
                 }}
-                thumbColor={biometricsEnabled ? colors.cyan[300] : colors.dark}
+                thumbColor={isAppLockEnabled ? colors.cyan[300] : colors.dark}
                 ios_backgroundColor={colors.opacity.dark[50]}
                 onValueChange={() =>
-                  handleToggle("biometricsEnabled", biometricsEnabled)
+                  handleToggle("biometricsEnabled", isAppLockEnabled)
                 }
-                value={biometricsEnabled}
+                value={isAppLockEnabled}
                 style={{ position: "absolute", right: 0 }}
               />
-            </View>
+            </View> */}
           </View>
           <View style={styles.line}></View>
         </View>
