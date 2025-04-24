@@ -86,7 +86,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.mkpasses"
+    namespace 'com.malikyakub.Mkpasses'
     defaultConfig {
         applicationId 'com.malikyakub.Mkpasses'
         minSdkVersion rootProject.ext.minSdkVersion

@@ -4,7 +4,7 @@
     "slug": "Mk-passes",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icons/icon-4.png",
+    "icon": "./assets/images/app-icons/bg-removed-icon.png",  
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "runtimeVersion": {
         "policy": "appVersion"
-      }
+      },
+      "bundleIdentifier": "com.malikyakub.Mkpasses.ios"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +26,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/app-icons/bg-removed-icon.png"
+      "favicon": "./assets/images/app-icons/icon-8.png"
     },
     "plugins": [
       "expo-router",

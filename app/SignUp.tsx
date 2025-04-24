@@ -99,7 +99,7 @@ const SignUp: React.FC = () => {
       fullname: form.fullname,
       email: form.email,
       username: form.username,
-      password: form.password,
+      // password: form.password, //? we leave this off the book for now
     };
 
     const { err } = await SignUp(form.email, form.password, newUser);
