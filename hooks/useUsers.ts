@@ -182,67 +182,6 @@ const useUsers = () => {
     }
   }
 
-  async function SavePushToken(id: string, pushToken: string): Promise<ReturnType> {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("users")
-        .update({ push_token: pushToken })
-        .eq("id", id)
-        .select();
-      
-      if (error) throw new Error(error.message);
-      
-      return { data, err: null };
-    } catch (error: unknown) {
-      return { data: null, err: String(error) };
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function SendPushNotification(userId: string, title: string, message: string) {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("users")
-        .select("push_token")
-        .eq("id", userId)
-        .single();
-
-      if (error || !data || !data.push_token) {
-        throw new Error("User push token not found");
-      }
-
-      const pushToken = data.push_token;
-
-      const response = await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: pushToken,
-          title,
-          body: message,
-          sound: "default",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send notification");
-      }
-
-      return { data: "Notification sent", err: null };
-    } catch (error) {
-      return { data: null, err: String(error) };
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  
-
   return {
     AllUsers,
     GetUserById,
@@ -251,8 +190,6 @@ const useUsers = () => {
     UploadProfile,
     ClearUserProfile,
     SaveSettingsToSession,
-    SavePushToken,
-    SendPushNotification,
     isLoading,
   };
 };
