@@ -20,7 +20,6 @@ const index = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { GetLoggedInUser, isloading } = useAuth();
-  const { SendPushNotification } = useUsers();
 
   useEffect(() => {
     loadUserSettings();
@@ -36,21 +35,6 @@ const index = () => {
     const user = await GetLoggedInUser();
 
     if (user) {
-      if (notificationsAllowed && user.id) {
-        try {
-          const { err } = await SendPushNotification(
-            user.id,
-            "Hello",
-            user.fullname
-          );
-          if (err) {
-            console.error("Push notification error:", err);
-          }
-        } catch (error) {
-          console.error("Unexpected error while sending notification:", error);
-        }
-      }
-
       router.push("/Home");
     } else {
       router.push("/Login");

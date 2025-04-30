@@ -56,7 +56,6 @@ const Userpage = () => {
     DeleteUser,
     ClearUserProfile,
     SaveSettingsToSession,
-    SendPushNotification,
   } = useUsers();
   const { DeleteAllPasswords } = usePasswords();
   const [user, setUser] = useState<User>();
@@ -92,16 +91,6 @@ const Userpage = () => {
       onAccept: async () => {
         await signOut();
         setConfirmDialog({ ...confirmDialog, is_open: false });
-        if (user) {
-          const { err } = await SendPushNotification(
-            user?.id,
-            user?.fullname,
-            "You logged out"
-          );
-          if (err) {
-            console.log(err);
-          }
-        }
         router.push("/Login");
       },
       onClose: () => {
